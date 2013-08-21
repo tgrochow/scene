@@ -147,7 +147,7 @@ namespace math3d
 	{
 		Vector r(2*math3d::dot(normal,*this)*normal-*this);
 
-		return r;
+		return r.normalize();
 	}
   
   Vector&

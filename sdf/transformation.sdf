@@ -11,14 +11,14 @@ transform rbottom rotatex 10
 transform rbottom rotatey -10
 transform rbottom rotatez -15
 transform rbottom translate 10 -2 -5
-transform bsphere translate -10 12 -4
+transform bsphere translate -25 12 -4
 transform gsphere scale 0.7 1 1
 transform bsphere scale 1 1 0.6
 # light - from right above
 define light sun -100 -500 -100 .5 .3 .4 .5 .8 .7
 # define light lamp 300 200 0 .1 .1 .1 .7 .7 .7
 # camera
-define camera eye 39.0
+define camera eye 45.0
 # ... and go
 render eye default.ppm 1000 800
 

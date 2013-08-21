@@ -1,7 +1,6 @@
 #include "../include/raytracer.hpp"
 
 #include <cmath>
-#include <iostream>
 
 namespace graphic
 {

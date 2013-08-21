@@ -48,8 +48,10 @@ namespace graphic
 	}
 
 	math3d::Intersection const 
-	Box::intersect(math3d::Ray const& r) const
+	Box::intersect(math3d::Ray const& ray) const
 	{		
+		math3d::Ray r(ray);
+		r = transform(r);		
 		math3d::Point origin(r.origin_);	
 		math3d::Vector direction(r.direction_);	
 		math3d::Intersection is;
@@ -110,6 +112,6 @@ namespace graphic
 			}	
 		}
 		
-		return is;
+		return transform(is);
 	}
 }

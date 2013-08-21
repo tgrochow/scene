@@ -1,3 +1,4 @@
+#include "include/matrix.hpp"
 #include "include/scene.hpp"
 #include "include/sdf_parser.hpp"
 

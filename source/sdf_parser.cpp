@@ -159,6 +159,78 @@ namespace graphic
 		return std::make_pair(name,std::shared_ptr<Camera>(camera));
 	}
 
+	// transform shapes
+	void 
+	Sdf_parser::transform(std::stringstream & ss,
+				 				 std::map<std::string, std::shared_ptr<Shape> > & shapes
+								 ,unsigned short line) const
+	{
+		std::string name,transformation;
+
+		ss >> name;
+
+		if (shapes.find(name) == shapes.end())
+		{	
+			std::stringstream message;
+			message << std::string("line ");	
+			message << line;
+			message << std::string(" : unknown shape");						
+			throw Graphic_exception(message.str());
+		}
+
+		ss >> transformation;
+
+		if(transformation == "rotatex")
+		{
+			double angle;
+			ss >> angle;
+			shapes.find(name)->second->rotate_x(angle);
+		}
+
+		else if(transformation == "rotatey")
+		{
+			double angle;
+			ss >> angle;
+			shapes.find(name)->second->rotate_y(angle);
+		}
+
+		else if(transformation == "rotatez")
+		{
+			double angle;
+			ss >> angle;
+			shapes.find(name)->second->rotate_z(angle);
+		}
+
+		else if(transformation == "scale")
+		{
+			double value[3];
+			ss >> value[0];
+			ss >> value[1];
+			ss >> value[2];
+			math3d::Vector v(value[0],value[1],value[2]);
+			shapes.find(name)->second->scale(v);
+		}
+
+		else if(transformation == "translate")
+		{
+			double value[3];
+			ss >> value[0];
+			ss >> value[1];
+			ss >> value[2];
+			math3d::Vector v(value[0],value[1],value[2]);
+			shapes.find(name)->second->translate(v);
+		}
+
+		else
+		{
+			std::stringstream message;
+			message << std::string("line ");	
+			message << line;
+			message << std::string(" : unknown transformation");						
+			throw Graphic_exception(message.str());
+		}
+	}
+
 	Scene const Sdf_parser::parse_scene() const
 	{
 		std::ifstream in;
@@ -241,6 +313,11 @@ namespace graphic
 
 			}
 
+			else if (command == "transform")
+			{
+				transform(ss,shapes,number);
+			}
+
 			else if (command == "render")
 			{
 				std::string cam_name;	
@@ -249,7 +326,7 @@ namespace graphic
 				ss >> xres;
 				ss >> yres;
 
-				if (cameras.find(cam_name)==cameras.end())
+				if (cameras.find(cam_name) == cameras.end())
 				{	
 					std::stringstream message;
 					message << std::string("line ");	

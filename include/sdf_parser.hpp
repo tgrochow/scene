@@ -31,6 +31,11 @@ namespace graphic
 		parse_light(std::stringstream &) const;
 		std::pair<std::string,std::shared_ptr<Camera> > const
 		parse_camera(std::stringstream &) const;
+		
+		void 
+		transform(std::stringstream &,
+					 std::map<std::string, std::shared_ptr<Shape> > &, 
+					 unsigned short) const;
 
 		std::string filename_;
 	};

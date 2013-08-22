@@ -1,24 +1,27 @@
 # materials
-define material red 1 0 0 1 0 0 1 0 0 120
-define material blue 0 0 1 0 0 1 0 0 1 3
-define material green 0 0.4 0 0 0.4 0 0 0.4 0 3
+
+define material violet 0.3 0.0 0.6 0.5 0.0 0.8 0.1 0.0 0.3 1.0 
+
 # geometry
-define shape box rbottom 5 10 -100 10 15 -80 red
-define shape sphere bsphere 0 0 -100 5 blue
-define shape sphere gsphere -70 -30 -300 21.7 green
+
+define shape box test_box -0.5 -0.5 -0.5 0.5 0.5 0.5 violet
+
 # transformation
-transform rbottom rotatex 10
-transform rbottom rotatey -10
-transform rbottom rotatez -15
-transform rbottom translate 10 -2 -5
-transform bsphere translate -25 12 -4
-transform gsphere scale 0.7 1 1
-transform bsphere scale 1 1 0.6
-# light - from right above
-define light sun -100 -500 -100 .5 .3 .4 .5 .8 .7
-# define light lamp 300 200 0 .1 .1 .1 .7 .7 .7
+
+transform test_box rotatex 20
+transform test_box rotatey 30
+transform test_box scale 3.0 3.0 3.0
+transform test_box translate 0.0 3.0 -25.0
+
+# light
+
+define light spot 0 0 0 0.3 0.3 0.3 0.9 0.9 0.9
+
 # camera
+
 define camera eye 45.0
-# ... and go
+
+# render
+
 render eye default.ppm 1000 800
 

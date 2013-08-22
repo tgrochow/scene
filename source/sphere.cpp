@@ -71,7 +71,7 @@ namespace graphic
 			origin = r.position(std::min(t1,t2));
 		}
 
-		direction = (origin - center_) / radius_;
+		direction = origin - center_;
 		return transform(math3d::Intersection(true,origin,direction,material_));
 	}
 }

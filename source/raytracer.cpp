@@ -1,7 +1,7 @@
 #include "../include/raytracer.hpp"
 
 #include <cmath>
-
+#include <iostream>
 namespace graphic
 {
 	// default constructor	
@@ -91,10 +91,10 @@ namespace graphic
 			Light	l(i->second);
 			// calc vector to actual light source		
 			math3d::Vector vl(l.position_ - is.intersection_);
-			vl = math3d::normalize(vl);
 			// calc reflected vector
 			math3d::Vector vr(vl.reflected(n));
-			
+			// normalize vector to light source
+			vl = math3d::normalize(vl);
 			// phong illumination
 			total += l.dif_lum_ * (mat->diffuse_ * (math3d::dot(vl,n)) +
 			mat->specular_ * (pow(math3d::dot(vr,n),mat->spec_exp_)));

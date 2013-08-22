@@ -146,8 +146,9 @@ namespace math3d
 	Vector::reflected(Vector const& normal) const
 	{
 		Vector r(2*math3d::dot(normal,*this)*normal-*this);
+		r = r.normalize();
 
-		return r.normalize();
+		return r;
 	}
   
   Vector&

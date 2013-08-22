@@ -106,7 +106,6 @@ namespace graphic
 						case 1 : is.normal_ = math3d::cross(v,u);
 									break;
 					}
-					is.normal_ = math3d::normalize(is.normal_);
 					is.material_ = material_;
 				}
 			}	

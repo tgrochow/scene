@@ -25,8 +25,12 @@ namespace graphic
 
 		private :
 		Color const ambient_lum(std::map<std::string,Light> const&) const;
-		Color const calc_phong(math3d::Vector const&,math3d::Intersection const&,
-									  std::map<std::string,Light> const&) const;
+		bool shadow(math3d::Ray const&,
+							std::map<std::string,std::shared_ptr<Shape> > const&)const;
+		Color const 
+		calc_phong(math3d::Vector const&,math3d::Intersection const&,
+					  std::map<std::string,std::shared_ptr<Shape> > const&,
+					  std::map<std::string,Light> const&) const;
 		
 		unsigned short refl_depth_,refr_depth_;
 	};

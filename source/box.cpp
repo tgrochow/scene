@@ -1,6 +1,6 @@
 #include "../include/box.hpp"
 #include "../include/graphic_exception.hpp"
-#include <iostream>
+
 namespace graphic
 {
 	// default constructor	

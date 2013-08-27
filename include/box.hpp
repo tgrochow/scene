@@ -17,10 +17,12 @@ namespace graphic
 			 math3d::Point const&,math3d::Point const&);
 		~Box();
 
+		// intersect box - ray
 		math3d::Intersection const intersect(math3d::Ray const&) const;
 				
 		private :
 		
+		// for intersect method
 		bool inside(math3d::Point const&) const;
 
 		math3d::Point min_,max_;

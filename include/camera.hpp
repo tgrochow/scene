@@ -28,6 +28,7 @@ namespace graphic
 		void rotate_x(double angle);
 		void rotate_y(double angle);
 		void rotate_z(double angle);
+		void scale(math3d::Vector const&);
 		void translate(math3d::Vector const&);
 		
 		private :

@@ -114,7 +114,14 @@ namespace graphic
 		transform_ *= math3d::make_rotation_z(angle);
 	}
 
-	// translate camera
+	// scale camera 
+	void 
+	Camera::scale(math3d::Vector const& sv)
+	{
+		transform_ *= math3d::make_scale(sv);
+	}
+
+	// translate camera coordinate system
 	void 
 	Camera::translate(math3d::Vector const& tv)
 	{

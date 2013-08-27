@@ -313,7 +313,7 @@ namespace graphic
 
 	// transform cameras
 	void 
-	Sdf_parser::fov(std::stringstream & ss,
+	Sdf_parser::view(std::stringstream & ss,
 		 std::map<std::string, std::shared_ptr<Camera> > & cameras,
 		 unsigned short line) const
 	{
@@ -347,6 +347,16 @@ namespace graphic
 			double angle;
 			ss >> angle;
 			cameras.find(name)->second->rotate_z(angle);
+		}
+
+		else if(transformation == "scale")
+		{
+			double value[3];
+			ss >> value[0];
+			ss >> value[1];
+			ss >> value[2];
+			math3d::Vector v(value[0],value[1],value[2]);
+			cameras.find(name)->second->scale(v);
 		}
 
 		else if(transformation == "translate")
@@ -458,9 +468,9 @@ namespace graphic
 			}
 
 			// transform camera
-			else if (command == "fov")
+			else if (command == "view")
 			{
-				fov(ss,cameras,number);
+				view(ss,cameras,number);
 			}
 
 			// render image

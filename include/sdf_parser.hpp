@@ -53,7 +53,7 @@ namespace graphic
 					 		std::map<std::string, std::shared_ptr<Shape> > &, 
 					 		unsigned short) const;
 		// transform field of view
-		void fov(std::stringstream &,
+		void view(std::stringstream &,
 					std::map<std::string, std::shared_ptr<Camera> > &,
 					unsigned short) const;
 

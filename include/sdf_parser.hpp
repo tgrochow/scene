@@ -44,6 +44,10 @@ namespace graphic
 		void transform(std::stringstream &,
 					 		std::map<std::string, std::shared_ptr<Shape> > &, 
 					 		unsigned short) const;
+		// transform field of view
+		void fov(std::stringstream &,
+					std::map<std::string, std::shared_ptr<Camera> > &,
+					unsigned short) const;
 
 		// name of sdf-file
 		std::string filename_;

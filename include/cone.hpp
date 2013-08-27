@@ -19,7 +19,7 @@ namespace graphic
 		math3d::Intersection const intersect(math3d::Ray const&) const;
 				
 		private :
-		math3d::Point center_, top_;
+		math3d::Point end_, top_;
 		double radius_;
 	};
 }

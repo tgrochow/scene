@@ -1,4 +1,4 @@
-#include "../include/cylinder.hpp"
+#include "../include/cone.hpp"
 
 #include "../include/graphic_exception.hpp"
 
@@ -7,18 +7,18 @@
 namespace graphic
 {
 	// default constructor
-	Cylinder::Cylinder() :
+	Cone::Cone() :
 	Shape(),
-	min_(math3d::Point(-0.3,-0.3,-0.3)),
-	max_(math3d::Point(0.3,0.3,0.3)),
+	end_(math3d::Point(-0.7,-0.7,-0.7)),
+	top_(math3d::Point(0.7,0.7,0.7)),
 	radius_(1.0)
 	{}
 
 	// user constructor origin
-	Cylinder::Cylinder(std::string const& name,std::shared_ptr<Material> const& mat):
+	Cone::Cone(std::string const& name,std::shared_ptr<Material> const& mat):
 	Shape(name,mat),
-	min_(math3d::Point(-0.3,-0.3,-0.3)),
-	max_(math3d::Point(0.3,0.3,0.3)),
+	end_(math3d::Point(-0.7,-0.7,-0.7)),
+	top_(math3d::Point(0.7,0.7,0.7)),
 	radius_(1.0)
 	{
 		if(radius_ <= 0.0) 
@@ -26,11 +26,11 @@ namespace graphic
 	}
 
 	// user constructor
-	Cylinder::Cylinder(std::string const& name,std::shared_ptr<Material> const& mat,
-				 		math3d::Point const& min, math3d::Point const& max, double radius) :
+	Cone::Cone(std::string const& name,std::shared_ptr<Material> const& mat,
+				 		math3d::Point const& end, math3d::Point const& top, double radius) :
 	Shape(name,mat),
-	min_(min),
-	max_(max),
+	end_(end),
+	top_(top),
 	radius_(radius)
 	{
 		if(radius_ <= 0.0) 
@@ -38,10 +38,10 @@ namespace graphic
 	}
 
 	// destructor
-	Cylinder::~Cylinder()
+	Cone::~Cone()
 	{}
 
-	math3d::Intersection const Cylinder::intersect(math3d::Ray const& ray) const
+	math3d::Intersection const Cone::intersect(math3d::Ray const& ray) const
 	{
 		double a,b,c,discriminant;		
 		math3d::Ray r(ray);
@@ -49,9 +49,9 @@ namespace graphic
 		math3d::Point origin(r.origin_);	
 		math3d::Vector direction(r.direction_);
 
-		a = pow(direction[0],2) + pow(direction[1],2);
-		b = 2*origin[0]*direction[0] + 2*origin[1]*direction[1];
-		c = pow(origin[0],2) + pow(origin[1],2) - 1;	
+		a = pow(direction[0],2) + pow(direction[1],2) - pow(direction[2],2);
+		b = 2*origin[0]*direction[0] + 2*origin[1]*direction[1] - 2*origin[2]*direction[2];
+		c = pow(origin[0],2) + pow(origin[1],2) - pow(origin[2],2);	
 		discriminant = pow(b,2) - 4*a*c;
 
 		if(discriminant < 0)
@@ -73,7 +73,7 @@ namespace graphic
 			origin = r.position(std::min(t1,t2));
 		}
 
-		direction = origin - min_;                                                 // und max_?
+		direction = origin - end_;                                                 // und top_?
 		return transform(math3d::Intersection(true,origin,direction,material_));
 	}
 }

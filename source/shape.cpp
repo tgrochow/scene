@@ -6,16 +6,14 @@
 namespace graphic
 {
 	Shape::Shape() :
-   name_(std::string("default")),
+   Scene_object(),
    material_(std::shared_ptr<Material>(new Material())),
-	transform_(math3d::Matrix()),
 	inv_transform_(math3d::Matrix())
    {}
 
 	Shape::Shape(std::string const& name,std::shared_ptr<Material> const& mat) :
-   name_(name),
+   Scene_object(name),
    material_(mat),
-	transform_(math3d::Matrix()),
 	inv_transform_(math3d::Matrix())
    {}
 
@@ -25,35 +23,35 @@ namespace graphic
 	void 
 	Shape::rotate_x(double angle)
 	{
-		transform_ *= math3d::make_rotation_x(convert_angle(angle));
+		Scene_object::rotate_x(angle);
 		inv_transform_ *= math3d::make_rotation_x(-convert_angle(angle));
 	}
 
 	void 
 	Shape::rotate_y(double angle)
 	{
-		transform_ *= math3d::make_rotation_y(convert_angle(angle));
+		Scene_object::rotate_y(angle);
 		inv_transform_ *= math3d::make_rotation_y(-convert_angle(angle));
 	}
 
 	void 
 	Shape::rotate_z(double angle)
 	{
-		transform_ *= math3d::make_rotation_z(convert_angle(angle));
+		Scene_object::rotate_z(angle);
 		inv_transform_ *= math3d::make_rotation_z(-convert_angle(angle));
 	}
 
 	void 
 	Shape::scale(math3d::Vector const& s)
 	{
-		transform_ *= math3d::make_scale(s);
+		Scene_object::scale(s);
 		inv_transform_ *= math3d::make_scale(1/s[0],1/s[1],1/s[2]);
 	}
 
 	void 
 	Shape::translate(math3d::Vector const& t)
 	{
-		transform_ *= math3d::make_translation(t);
+		Scene_object::translate(t);
 		inv_transform_ *= math3d::make_translation(-t[0],-t[1],-t[2]);
 	}
 
@@ -76,11 +74,5 @@ namespace graphic
 		normal = normal.normalize();
 
 		return math3d::Intersection(i.hit_,intersection,normal,i.material_);
-	}
-
-	double 
-	Shape::convert_angle(double angle) const
-	{
-		return angle * M_PI / 180;
 	}
 }

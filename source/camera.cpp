@@ -7,34 +7,31 @@ namespace graphic
 {
 	// default constructor
 	Camera::Camera() :
-	name_(std::string("default")),
+	Scene_object(),
 	pos_(math3d::Point::origin()),
 	dir_(math3d::Vector(0.0,0.0,-1.0)),
 	up_(math3d::Vector::unit_y()),
-	fovx_(45.0),
-	transform_(math3d::Matrix())
+	fovx_(45.0)
 	{}
 
 	// user constructor origin	
 	Camera::Camera(std::string const& name,double fovx) :
-	name_(name),
+	Scene_object(name),
 	pos_(math3d::Point::origin()),
 	dir_(math3d::Vector(0.0,0.0,-1.0)),
 	up_(math3d::Vector::unit_y()),
-	fovx_(fovx),
-	transform_(math3d::Matrix())
+	fovx_(fovx)
 	{}
 
 	// user constructor
 	Camera::Camera(std::string const& name,double fovx,
 						math3d::Point const& pos,math3d::Vector const& dir,
 						math3d::Vector const& up) :
-	name_(name),
+	Scene_object(name),
 	pos_(math3d::Point::origin()),
 	dir_(math3d::Vector(0.0,0.0,-1.0)),
 	up_(math3d::Vector::unit_y()),
-	fovx_(fovx),
-	transform_(math3d::Matrix())
+	fovx_(fovx)
 	{
 		math3d::Vector u(math3d::cross(dir_,up_));
 		math3d::Vector v(math3d::cross(u,dir_));
@@ -57,19 +54,6 @@ namespace graphic
 	Camera::~Camera()
 	{}
 
-	// transform ray in camera coordinate system
-	math3d::Ray const 
-	Camera::transform(math3d::Ray const& r) const
-	{
-		math3d::Point origin(r.origin_);
-		math3d::Vector direction(r.direction_);
-		
-		origin = transform_ * origin;		
-		direction = transform_ * direction;
-
-		return math3d::Ray(origin,direction);
-	}
-
 	// cast ray through field of view
 	math3d::Ray const 
 	Camera::cast_ray(short viewx,short viewy,double distance) const
@@ -84,54 +68,6 @@ namespace graphic
 	double 
 	Camera::calc_distance(unsigned short res_x) const
 	{
-		return res_x / (2 * tan(convert_fov() / 2));
-	}
-
-	// rotate camera around x-axis
-	void 
-	Camera::rotate_x(double angle)
-	{
-		angle = angle * M_PI / 180;
-
-		transform_ *= math3d::make_rotation_x(angle);
-	}
-
-	// rotate camera around y-axis
-	void 
-	Camera::rotate_y(double angle)
-	{
-		angle = angle * M_PI / 180;
-
-		transform_ *= math3d::make_rotation_y(angle);
-	}
-
-	// rotate camera around z-axis
-	void 
-	Camera::rotate_z(double angle)
-	{
-		angle = angle * M_PI / 180;
-
-		transform_ *= math3d::make_rotation_z(angle);
-	}
-
-	// scale camera 
-	void 
-	Camera::scale(math3d::Vector const& sv)
-	{
-		transform_ *= math3d::make_scale(sv);
-	}
-
-	// translate camera coordinate system
-	void 
-	Camera::translate(math3d::Vector const& tv)
-	{
-		transform_ *= math3d::make_translation(tv);
-	}
-
-	// convert degree to radiant
-	double
-	Camera::convert_fov() const
-	{
-		return fovx_ * M_PI / 180;
+		return res_x / (2 * tan(convert_angle(fovx_) / 2));
 	}
 }

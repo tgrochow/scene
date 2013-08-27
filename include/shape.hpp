@@ -5,13 +5,13 @@
 #include <string>
 
 #include "intersection.hpp"
-#include "material.hpp"
 #include "matrix.hpp"
 #include "ray.hpp"
+#include "scene_object.hpp"
 
 namespace graphic
 {
-	class Shape
+	class Shape : public Scene_object
 	{
 		public :
 		Shape();
@@ -30,12 +30,8 @@ namespace graphic
 		math3d::Ray const transform(math3d::Ray const&) const;
 		math3d::Intersection const transform(math3d::Intersection const&) const;
 
-		std::string name_;
 		std::weak_ptr<Material> material_;
-		math3d::Matrix transform_,inv_transform_;
-
-		private :
-		double convert_angle(double) const;
+		math3d::Matrix inv_transform_;
     };
 }
 

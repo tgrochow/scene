@@ -5,10 +5,11 @@
 
 #include "matrix.hpp"
 #include "ray.hpp"
+#include "scene_object.hpp"
 
 namespace graphic
 {
-	class Camera
+	class Camera : public Scene_object
 	{
 		public :
 		
@@ -23,28 +24,12 @@ namespace graphic
 		math3d::Ray const cast_ray(short,short,double) const;
 		// calc distance to field of view
 		double calc_distance(unsigned short) const;
-
-		// transform view
-		void rotate_x(double angle);
-		void rotate_y(double angle);
-		void rotate_z(double angle);
-		void scale(math3d::Vector const&);
-		void translate(math3d::Vector const&);
 		
 		private :
-		
-		// transform ray in camera coordinate system
-		math3d::Ray const transform(math3d::Ray const&) const;
-		// convert deg->rad
-		double convert_fov() const;
 
-		std::string name_;
 		math3d::Point pos_;
 		math3d::Vector dir_,up_;
 		double fovx_;
-
-		// transform matrix
-		math3d::Matrix transform_;
 	};
 }
 

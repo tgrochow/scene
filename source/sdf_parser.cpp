@@ -4,7 +4,7 @@
 #include <string>
 #include <sstream>
 #include <utility> 
-
+#include <iostream>
 #include "../include/color.hpp"
 #include "../include/graphic_exception.hpp"
 
@@ -24,10 +24,24 @@ namespace graphic
 	Sdf_parser::~Sdf_parser()
 	{}
 
+	// throw graphix exception
+	void Sdf_parser::
+	parsing_exception(std::string const& message,unsigned short line) const
+	{
+			std::stringstream ss;
+			ss << std::string("\nline ");	
+			ss << line;
+			ss << std::string(" : " + message);						
+			throw Graphic_exception(ss.str());
+	}
+
 	// parse material for map insertion
 	std::pair<std::string,std::shared_ptr<Material> > const
-	Sdf_parser::parse_material(std::stringstream & ss) const
-	{
+	Sdf_parser::parse_material(std::stringstream & ss,unsigned short line) const
+	{		
+		if(count_words(ss.str()) != 13)
+			parsing_exception(syntax_material(),line);	
+		
 		std::string name;		
 		float ambient[3], diffuse[3], specular[3], exp;
 
@@ -58,6 +72,9 @@ namespace graphic
 					 			 std::shared_ptr<Material> > const& materials,
 								 unsigned short line) const
 	{
+		if(count_words(ss.str()) != 11)
+			parsing_exception(syntax_box(),line);		
+
 		std::string name, material;
 		double min[3], max[3];	
 
@@ -72,11 +89,7 @@ namespace graphic
 
 		if (materials.find(material) == materials.end())
 		{	
-			std::stringstream message;
-			message << std::string("line ");	
-			message << line;
-			message << std::string(" : unknown material");						
-			throw Graphic_exception(message.str());
+			parsing_exception("unknown material",line);
 		}		
 
 		std::shared_ptr<Material> m = materials.find(material)->second;
@@ -92,6 +105,9 @@ namespace graphic
 					 			 	 std::shared_ptr<Material> > const& materials,
 								 	 unsigned short line) const
 	{
+		if(count_words(ss.str()) != 9)
+			parsing_exception(syntax_sphere(),line);			
+
 		std::string name,material;
 		double center[3], radius;
 						
@@ -104,11 +120,7 @@ namespace graphic
 
 		if (materials.find(material) == materials.end())
 		{	
-			std::stringstream message;
-			message << std::string("line ");	
-			message << line;
-			message << std::string(" : unknown material");						
-			throw Graphic_exception(message.str());
+			parsing_exception("unknown material",line);
 		}	
 
 		std::shared_ptr<Material> m = materials.find(material)->second;
@@ -120,8 +132,11 @@ namespace graphic
 
 	// parse light for map insertion
 	std::pair<std::string,Light> const
-	Sdf_parser::parse_light(std::stringstream & ss) const
-	{
+	Sdf_parser::parse_light(std::stringstream & ss,unsigned short line) const
+	{			
+		if(count_words(ss.str()) != 12)
+			parsing_exception(syntax_light(),line);		
+
 		std::string name;
 		double pos[3], ambient[3], diffuse[3];
 
@@ -146,8 +161,11 @@ namespace graphic
 
 	// parse camera for map insertion
 	std::pair<std::string,std::shared_ptr<Camera> > const
-	Sdf_parser::parse_camera(std::stringstream & ss) const
+	Sdf_parser::parse_camera(std::stringstream & ss,unsigned short line) const
 	{
+		if(count_words(ss.str()) != 4)
+			parsing_exception(syntax_camera(),line);		
+
 		std::string name;
 		double fovx;
 
@@ -171,11 +189,7 @@ namespace graphic
 
 		if (shapes.find(name) == shapes.end())
 		{	
-			std::stringstream message;
-			message << std::string("line ");	
-			message << line;
-			message << std::string(" : unknown shape");						
-			throw Graphic_exception(message.str());
+			parsing_exception("unknown shape",line);			
 		}
 
 		ss >> transformation;
@@ -223,11 +237,7 @@ namespace graphic
 
 		else
 		{
-			std::stringstream message;
-			message << std::string("line ");	
-			message << line;
-			message << std::string(" : unknown transformation");						
-			throw Graphic_exception(message.str());
+			parsing_exception("unknown transformation",line);
 		}
 	}
 
@@ -244,6 +254,7 @@ namespace graphic
 		unsigned short xres,yres,number = 1;
 
 
+		// open filestream
 		in.open(filename_);
 
 		if(!in.is_open()) throw Graphic_exception("sdf-file not found");
@@ -262,8 +273,8 @@ namespace graphic
 			{
 				ss >> command;
 				if (command == "material")
-				{
-					materials.insert(parse_material(ss));
+				{						
+					materials.insert(parse_material(ss,number));
 				}
 				
 				else if (command == "shape")
@@ -282,33 +293,25 @@ namespace graphic
 				
 					else 
 					{
-						std::stringstream message;
-						message << std::string("line ");	
-						message << number;
-						message << std::string(" : unknown shape");						
-						throw Graphic_exception(message.str());
+						parsing_exception("unknown shape",number);
 					}
 				
 				}
 
 				else if (command == "light")
-				{
-					lights.insert(parse_light(ss));
+				{					
+					lights.insert(parse_light(ss,number));
 				}
 
 				else if (command == "camera")
 				{
 
-					cameras.insert(parse_camera(ss));
+					cameras.insert(parse_camera(ss,number));
 				}
 
 				else 
 				{
-					std::stringstream message;
-					message << std::string("line ");	
-					message << number;
-					message << std::string(" : unknown type");						
-					throw Graphic_exception(message.str());
+					parsing_exception("unknown type",number);
 				}
 
 			}
@@ -320,6 +323,9 @@ namespace graphic
 
 			else if (command == "render")
 			{
+				if(count_words(ss.str()) != 5)
+					parsing_exception(syntax_render(),number);
+
 				std::string cam_name;	
 				ss >> cam_name;			
 				ss >> filename;
@@ -328,11 +334,7 @@ namespace graphic
 
 				if (cameras.find(cam_name) == cameras.end())
 				{	
-					std::stringstream message;
-					message << std::string("line ");	
-					message << number;
-					message << std::string(" : unknown type");						
-					throw Graphic_exception(message.str());
+					parsing_exception("unknown camera",number);
 				}
 
 			   rcam = cameras.find(cam_name)->second;		
@@ -343,18 +345,100 @@ namespace graphic
 
 			else 
 			{
-				std::stringstream message;
-				message << std::string("line ");	
-				message << number;
-				message << std::string(" : unknown command");						
-				throw Graphic_exception(message.str());
+				parsing_exception("unknown command",number);
 			}
 
 			number++;	
 		}
 
+		// close filestream
 		in.close();
 
+		// generate parsed scene
 		return Scene(cameras,lights,materials,shapes,rcam,filename,xres,yres); 
+	}
+
+	// return syntax for defining a material
+	std::string const syntax_material()
+	{
+		std::string syntax;
+		syntax.insert(0,"define material <name> <amb_red> ");
+		syntax.insert(syntax.length()-1,"<amb_green> <amb_blue> <dif_red> ");
+		syntax.insert(syntax.length()-1,"<dif_green> <dif_blue> <spec_red> ");
+		syntax.insert(syntax.length()-1,"<spec_green> <spec_blue> <spec_exp>\n");
+
+		return syntax;
+	}
+
+	// return syntax for defining a box
+	std::string const syntax_box()
+	{
+		std::string syntax;
+		syntax.insert(0,"define shape box <name> <min_x> <min_y> <min_z>");
+		syntax.insert(syntax.length()-1,"<max_x> <max_y> <max_z> <mat_name>\n");
+
+		return syntax;
+	}
+
+	// return syntax for defining a sphere
+	std::string const syntax_sphere()
+	{
+		std::string syntax;
+		syntax.insert(0,"define shape sphere <name> <pos_x> <pos_y> <pos_z>");
+		syntax.insert(syntax.length()-1,"<radius> <matname>\n");
+
+		return syntax;
+	}
+
+	// return syntax for defining a light
+	std::string const syntax_light()
+	{
+		std::string syntax;
+		syntax.insert(0,"define light <name> <pos_x> <pos_y> <pos_z> <amb_red>");
+		syntax.insert(syntax.length()-1,"<amb_green> <amb_blue> <dif_red> ");
+		syntax.insert(syntax.length()-1,"<dif_green> <dif_blue>\n");
+
+		return syntax;
+	}
+
+	// return syntax for defining a camera
+	std::string const syntax_camera()
+	{
+		std::string syntax;
+		syntax.insert(0,"define camera <fov_x>\n");
+
+		return syntax;
+	}
+
+	// return syntax for rendering the image
+	std::string const syntax_render()
+	{
+		std::string syntax;
+		syntax.insert(0,"render <cam_name> <image_name> <xres> <yres>\n");
+
+		return syntax;
+	}
+
+	// count words separated by tab or space of a std::string
+	unsigned short count_words(std::string const& s)
+	{
+		unsigned short num_words(0);
+		bool behind_space(true);		
+		
+		// for every sign in the string		
+		for(unsigned short index = 0 ; index < s.length() ; index++)
+		{
+			// if sign at index is tab or space			
+			if(s[index] == ' ' || s[index] == '\t') behind_space = true;
+
+			// new word begins
+			else if(behind_space && s[index] != '\n' && s[index] != '\0')
+			{
+				num_words++;
+				behind_space = false;
+			}
+		}		
+	
+		return num_words;
 	}
 }

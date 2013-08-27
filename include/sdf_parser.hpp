@@ -12,6 +12,7 @@ namespace graphic
 	class Sdf_parser 
 	{
 		public:
+
 		Sdf_parser();	
 		Sdf_parser(std::string const&);
 		~Sdf_parser();
@@ -19,8 +20,13 @@ namespace graphic
 		Scene const parse_scene() const;
 	
 		private:
+
+		// throw graphic exception
+		void parsing_exception(std::string const&,unsigned short) const;
+
+		// parsing objects for scene generation
 		std::pair<std::string,std::shared_ptr<Material> > const
-		parse_material(std::stringstream &) const;
+		parse_material(std::stringstream &,unsigned short) const;
 		std::pair<std::string,std::shared_ptr<Box> > const
 		parse_box(std::stringstream &,std::map<std::string,
 					 std::shared_ptr<Material> > const&,unsigned short) const;
@@ -28,18 +34,27 @@ namespace graphic
 		parse_sphere(std::stringstream &,std::map<std::string,
 					 	 std::shared_ptr<Material> > const&,unsigned short) const;
 		std::pair<std::string,Light> const
-		parse_light(std::stringstream &) const;
+		parse_light(std::stringstream &,unsigned short) const;
 		std::pair<std::string,std::shared_ptr<Camera> > const
-		parse_camera(std::stringstream &) const;
-		
-		void 
-		transform(std::stringstream &,
-					 std::map<std::string, std::shared_ptr<Shape> > &, 
-					 unsigned short) const;
+		parse_camera(std::stringstream &,unsigned short) const;
+
+		// transform generated objects
+		void transform(std::stringstream &,
+					 		std::map<std::string, std::shared_ptr<Shape> > &, 
+					 		unsigned short) const;
 
 		std::string filename_;
 	};
 
+	// help with syntax
+	std::string const syntax_material();
+	std::string const syntax_box();
+	std::string const syntax_sphere();
+	std::string const syntax_light();
+	std::string const syntax_camera();
+	std::string const syntax_render();
+
+	unsigned short count_words(std::string const&);
 }
 
 #endif

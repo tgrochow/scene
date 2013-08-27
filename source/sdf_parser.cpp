@@ -166,8 +166,7 @@ namespace graphic
 	}
 
 	// parse cylinder for map insertion
-	/*
-	std::pair<std::string,std::shared_ptr<Sphere> > const
+	std::pair<std::string,std::shared_ptr<Cylinder> > const
 	Sdf_parser::parse_cylinder(std::stringstream & ss,std::map<std::string,
 					 			 	 std::shared_ptr<Material> > const& materials,
 								 	 unsigned short line) const
@@ -176,7 +175,7 @@ namespace graphic
 			//parsing_exception(syntax_cylinder(),line);			
 
 		std::string name,material;
-		double center[3], radius;
+		double min[3],max[3],radius;
 						
 		ss >> name;
 		ss >> min[0];
@@ -198,9 +197,8 @@ namespace graphic
 						  p_max(max[0],max[1],max[2]);
 		Cylinder * cylinder = new Cylinder(name,m,p_min,p_max,radius);	
 
-		return std::make_pair(name,std::shared_ptr<Sphere>(cylinder));
+		return std::make_pair(name,std::shared_ptr<Cylinder>(cylinder));
 	}
-	*/
 
 	// parse light for map insertion
 	std::pair<std::string,Light> const
@@ -367,6 +365,11 @@ namespace graphic
 					else if (command == "cone")
 					{
 						shapes.insert(parse_cone(ss,materials,number));
+					}
+
+					else if (command == "cylinder")
+					{
+						shapes.insert(parse_cylinder(ss,materials,number));
 					}
 				
 					else 

@@ -45,7 +45,7 @@ namespace graphic
 	{
 		double a,b,c,discriminant,side_b, h;		
 		math3d::Ray r(ray), s;
-		//r = transform(r);		
+		r = transform(r);		
 		math3d::Point origin(r.origin_);	
 		math3d::Vector direction(r.direction_), d, normal;
 

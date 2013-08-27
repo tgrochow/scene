@@ -311,7 +311,60 @@ namespace graphic
 		}
 	}
 
-	Scene const Sdf_parser::parse_scene() const
+	// transform cameras
+	void 
+	Sdf_parser::fov(std::stringstream & ss,
+		 std::map<std::string, std::shared_ptr<Camera> > & cameras,
+		 unsigned short line) const
+	{
+		std::string name,transformation;
+
+		ss >> name;
+
+		if (cameras.find(name) == cameras.end())
+		{	
+			parsing_exception("unknown camera",line);			
+		}
+
+		if(transformation == "rotatex")
+		{
+			double angle;
+			ss >> angle;
+			cameras.find(name)->second->rotate_x(angle);
+		}
+
+		else if(transformation == "rotatey")
+		{
+			double angle;
+			ss >> angle;
+			cameras.find(name)->second->rotate_y(angle);
+		}
+
+		else if(transformation == "rotatez")
+		{
+			double angle;
+			ss >> angle;
+			cameras.find(name)->second->rotate_z(angle);
+		}
+
+		else if(transformation == "translate")
+		{
+			double value[3];
+			ss >> value[0];
+			ss >> value[1];
+			ss >> value[2];
+			math3d::Vector v(value[0],value[1],value[2]);
+			cameras.find(name)->second->translate(v);
+		}
+
+		else
+		{
+			parsing_exception("unknown transformation",line);
+		}
+	}
+
+	Scene const 
+	Sdf_parser::parse_scene() const
 	{
 		std::ifstream in;
 		std::string line;
@@ -400,6 +453,12 @@ namespace graphic
 			else if (command == "transform")
 			{
 				transform(ss,shapes,number);
+			}
+
+			// transform camera
+			else if (command == "fov")
+			{
+				fov(ss,cameras,number);
 			}
 
 			// render image

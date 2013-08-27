@@ -3,6 +3,7 @@
 
 #include <string>
 
+#include "matrix.hpp"
 #include "ray.hpp"
 
 namespace graphic
@@ -24,7 +25,9 @@ namespace graphic
 		double calc_distance(unsigned short) const;
 		
 		private :
-
+		
+		// transform ray in camera coordinate system
+		math3d::Ray const transform(math3d::Ray const&) const;
 		// convert deg->rad
 		double convert_fov() const;
 
@@ -32,6 +35,9 @@ namespace graphic
 		math3d::Point pos_;
 		math3d::Vector dir_,up_;
 		double fovx_;
+
+		// transform matrix
+		math3d::Matrix transform_;
 	};
 }
 

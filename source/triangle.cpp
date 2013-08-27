@@ -21,15 +21,14 @@ namespace graphic
 	
 	// user constructor
 	Triangle::Triangle(std::string const& name,std::shared_ptr<Material> const& mat,
-		 		math3d::Point const& min,math3d::Point const& max) :
+		 		math3d::Point const& a,math3d::Point const& b,math3d::Point const& b) :
 	Shape(name,mat),
 	a_(a),
 	b_(b),
 	c_(C)
 	{
-		if(a_ == b_ || a_ == c_ || b_ == c_) 
-		//if(a_[0] == b_[0] || a_[1] == b_[1] || a_[2] == b_[2] || a_[0] == c_[0] || 
-		//   a_[1] == c_[1] || a_[2] == c_[2] || b_[0] == c_[0] || b_[1] == c_[1] || b_[2] == c_[2])
+		if(a_[0] == b_[0] && a_[0] == c_[0] || a_[1] == b_[1] && a_[1] == c_[1] || 
+		   a_[2] == b_[2] && a_[2] == c_[2])
 		{
 			throw Graphic_exception(std::string("coordinate - condition violated"));
 		}
@@ -39,82 +38,8 @@ namespace graphic
 	Triangle::~Triangle()
 	{}
 
-	bool 
-	Triangle::inside(math3d::Point const& p) const
-	{		
-		double const tolerance = 0.00001;		
+	//math3d::Intersection const 
+	//Triangle::intersect(math3d::Ray const& r) const
+	//{}	
 
-		return p[0] >= std::min(a_[0],b_[0],c_[0]) - tolerance && 
-				 p[0] <= std::max(a_[0],b_[0],c_[0]) + tolerance && 
-				 p[1] >= std::min(a_[1],b_[1],c_[1]) - tolerance && 
-				 p[1] <= std::max(a_[1],b_[1],c_[1]) + tolerance && 
-				 p[2] >= std::min(a_[2],b_[2],c_[2]) - tolerance && 
-				 p[2] <= std::max(a_[2],b_[2],c_[2]) + tolerance;
-	}
-
-	/*math3d::Intersection const 
-	Triangle::intersect(math3d::Ray const& r) const
-	{		
-		math3d::Point origin(r.origin_);	
-		math3d::Vector direction(r.direction_);	
-		math3d::Intersection is;
-		 	
-		// for every dimension
-		for(unsigned short i = 0 ; i < 3 ; i++)
-		{	
-			// basis vector			
-			math3d::Vector u,v;			
-	
-			switch(i)
-			{
-				// calc basis vector for actual dimension				
-				case 0 : u = math3d::Point(min_[0],min_[1],max_[2]) - min_;
-							v = math3d::Point(min_[0],max_[1],min_[2]) - min_;
-							break;
-				case 1 : u = math3d::Point(max_[0],min_[1],min_[2]) - min_;
-							v = math3d::Point(min_[0],min_[1],max_[2]) - min_;
-							break;
-				case 2 : u = math3d::Point(min_[0],max_[1],min_[2]) - min_;
-							v = math3d::Point(max_[0],min_[1],min_[2]) - min_;
-							break;
-			}		
-
-			// for min and max
-			for(unsigned short j = 0 ; j < 2 ; j++)
-			{
-				double t(0);				
-				switch(j)
-				{
-					// calc intersection value					
-					case 0 : t = (min_[i]-origin[i])/direction[i];
-								break;
-					case 1 : t = (max_[i]-origin[i])/direction[i];
-								break;
-				}
-
-				// calc intersection
-				math3d::Point p(r.position(t));
-
-				// check if intersection is on box and compare with second intersect
-				if(inside(p) && (!is.hit_ || math3d::distance(origin,p) < 
-					math3d::distance(origin,is.intersection_)))
-				{													
-					is.hit_ = true;
-					is.intersection_ = p;
-					// calc normal
-					switch(j)
-					{
-						case 0 : is.normal_ = math3d::cross(u,v);
-									break;
-						case 1 : is.normal_ = math3d::cross(v,u);
-									break;
-					}
-					is.normal_ = math3d::normalize(is.normal_);
-					is.material_ = material_;
-				}
-			}	
-		}
-		
-		return is;
-	} */
 }

@@ -248,90 +248,36 @@ namespace graphic
 	}
 
 	// transform shapes
-	void 
-	Sdf_parser::transform(std::stringstream & ss,
-				 				 std::map<std::string, std::shared_ptr<Shape> > & shapes
-								 ,unsigned short line) const
+	void Sdf_parser::
+	transform(std::stringstream & ss,
+				 std::map<std::string, std::shared_ptr<Shape> > & shapes,
+				 std::map<std::string, std::shared_ptr<Camera> > & cameras,
+				 unsigned short line,bool shape) const
 	{
 		std::string name,transformation;
 
 		ss >> name;
 
-		if (shapes.find(name) == shapes.end())
+		if (shape && shapes.find(name) == shapes.end())
 		{	
 			parsing_exception("unknown shape",line);			
 		}
 
+		else if(!shape && cameras.find(name) == cameras.end())
+		{
+			parsing_exception("unknown camera",line);	
+		}
+
 		ss >> transformation;
 
 		if(transformation == "rotatex")
 		{
 			double angle;
 			ss >> angle;
+
+			if(shape)
 			shapes.find(name)->second->rotate_x(angle);
-		}
-
-		else if(transformation == "rotatey")
-		{
-			double angle;
-			ss >> angle;
-			shapes.find(name)->second->rotate_y(angle);
-		}
-
-		else if(transformation == "rotatez")
-		{
-			double angle;
-			ss >> angle;
-			shapes.find(name)->second->rotate_z(angle);
-		}
-
-		else if(transformation == "scale")
-		{
-			double value[3];
-			ss >> value[0];
-			ss >> value[1];
-			ss >> value[2];
-			math3d::Vector v(value[0],value[1],value[2]);
-			shapes.find(name)->second->scale(v);
-		}
-
-		else if(transformation == "translate")
-		{
-			double value[3];
-			ss >> value[0];
-			ss >> value[1];
-			ss >> value[2];
-			math3d::Vector v(value[0],value[1],value[2]);
-			shapes.find(name)->second->translate(v);
-		}
-
-		else
-		{
-			parsing_exception("unknown transformation",line);
-		}
-	}
-
-	// transform cameras
-	void 
-	Sdf_parser::view(std::stringstream & ss,
-		 std::map<std::string, std::shared_ptr<Camera> > & cameras,
-		 unsigned short line) const
-	{
-		std::string name,transformation;
-
-		ss >> name;
-
-		if (cameras.find(name) == cameras.end())
-		{	
-			parsing_exception("unknown camera",line);			
-		}
-
-		ss >> transformation;
-
-		if(transformation == "rotatex")
-		{
-			double angle;
-			ss >> angle;
+			else
 			cameras.find(name)->second->rotate_x(angle);
 		}
 
@@ -339,6 +285,10 @@ namespace graphic
 		{
 			double angle;
 			ss >> angle;
+
+			if(shape)
+			shapes.find(name)->second->rotate_y(angle);
+			else
 			cameras.find(name)->second->rotate_y(angle);
 		}
 
@@ -346,6 +296,10 @@ namespace graphic
 		{
 			double angle;
 			ss >> angle;
+		
+			if(shape)
+			shapes.find(name)->second->rotate_z(angle);
+			else
 			cameras.find(name)->second->rotate_z(angle);
 		}
 
@@ -356,6 +310,10 @@ namespace graphic
 			ss >> value[1];
 			ss >> value[2];
 			math3d::Vector v(value[0],value[1],value[2]);
+
+			if(shape)
+			shapes.find(name)->second->scale(v);
+			else
 			cameras.find(name)->second->scale(v);
 		}
 
@@ -366,6 +324,10 @@ namespace graphic
 			ss >> value[1];
 			ss >> value[2];
 			math3d::Vector v(value[0],value[1],value[2]);
+
+			if(shape)
+			shapes.find(name)->second->translate(v);
+			else
 			cameras.find(name)->second->translate(v);
 		}
 
@@ -464,13 +426,13 @@ namespace graphic
 			// transform objects
 			else if (command == "transform")
 			{
-				transform(ss,shapes,number);
+				transform(ss,shapes,cameras,number,true);
 			}
 
 			// transform camera
 			else if (command == "view")
 			{
-				view(ss,cameras,number);
+				transform(ss,shapes,cameras,number,false);
 			}
 
 			// render image

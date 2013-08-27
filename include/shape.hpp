@@ -17,6 +17,7 @@ namespace graphic
 		Shape();
       Shape(std::string const& name,std::shared_ptr<Material> const& mat);
       virtual ~Shape();
+
       virtual math3d::Intersection const 
 				  intersect(math3d::Ray const& r) const = 0;
 

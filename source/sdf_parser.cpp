@@ -4,7 +4,7 @@
 #include <string>
 #include <sstream>
 #include <utility> 
-#include <iostream>
+
 #include "../include/color.hpp"
 #include "../include/graphic_exception.hpp"
 
@@ -269,6 +269,7 @@ namespace graphic
 
 			ss >> command;
 
+			// define objects
 			if (command == "define")
 			{
 				ss >> command;
@@ -305,7 +306,6 @@ namespace graphic
 
 				else if (command == "camera")
 				{
-
 					cameras.insert(parse_camera(ss,number));
 				}
 
@@ -316,11 +316,13 @@ namespace graphic
 
 			}
 
+			// transform objects
 			else if (command == "transform")
 			{
 				transform(ss,shapes,number);
 			}
 
+			// render image
 			else if (command == "render")
 			{
 				if(count_words(ss.str()) != 5)

@@ -13,10 +13,12 @@ namespace graphic
 	{
 		public:
 
+		// constructor,destructor
 		Sdf_parser();	
 		Sdf_parser(std::string const&);
 		~Sdf_parser();
 
+		// primary method
 		Scene const parse_scene() const;
 	
 		private:
@@ -43,6 +45,7 @@ namespace graphic
 					 		std::map<std::string, std::shared_ptr<Shape> > &, 
 					 		unsigned short) const;
 
+		// name of sdf-file
 		std::string filename_;
 	};
 

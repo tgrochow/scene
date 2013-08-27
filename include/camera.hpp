@@ -23,6 +23,12 @@ namespace graphic
 		math3d::Ray const cast_ray(short,short,double) const;
 		// calc distance to field of view
 		double calc_distance(unsigned short) const;
+
+		// transform view
+		void rotate_x(double angle);
+		void rotate_y(double angle);
+		void rotate_z(double angle);
+		void translate(math3d::Vector const&);
 		
 		private :
 		

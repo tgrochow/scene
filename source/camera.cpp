@@ -57,16 +57,6 @@ namespace graphic
 	Camera::~Camera()
 	{}
 
-	// cast ray through field of view
-	math3d::Ray const 
-	Camera::cast_ray(short viewx,short viewy,double distance) const
-	{
-		math3d::Point pixel(viewx,viewy,-distance);
-		math3d::Vector direction(pixel - pos_);
-		
-		return transform(math3d::Ray(pos_,direction));
-	}
-
 	// transform ray in camera coordinate system
 	math3d::Ray const 
 	Camera::transform(math3d::Ray const& r) const
@@ -80,11 +70,55 @@ namespace graphic
 		return math3d::Ray(origin,direction);
 	}
 
+	// cast ray through field of view
+	math3d::Ray const 
+	Camera::cast_ray(short viewx,short viewy,double distance) const
+	{
+		math3d::Point pixel(viewx,viewy,-distance);
+		math3d::Vector direction(pixel - pos_);
+		
+		return transform(math3d::Ray(pos_,direction));
+	}
+
 	// calc distance to field of view
 	double 
 	Camera::calc_distance(unsigned short res_x) const
 	{
 		return res_x / (2 * tan(convert_fov() / 2));
+	}
+
+	// rotate camera around x-axis
+	void 
+	Camera::rotate_x(double angle)
+	{
+		angle = angle * M_PI / 180;
+
+		transform_ *= math3d::make_rotation_x(angle);
+	}
+
+	// rotate camera around y-axis
+	void 
+	Camera::rotate_y(double angle)
+	{
+		angle = angle * M_PI / 180;
+
+		transform_ *= math3d::make_rotation_y(angle);
+	}
+
+	// rotate camera around z-axis
+	void 
+	Camera::rotate_z(double angle)
+	{
+		angle = angle * M_PI / 180;
+
+		transform_ *= math3d::make_rotation_z(angle);
+	}
+
+	// translate camera
+	void 
+	Camera::translate(math3d::Vector const& tv)
+	{
+		transform_ *= math3d::make_translation(tv);
 	}
 
 	// convert degree to radiant

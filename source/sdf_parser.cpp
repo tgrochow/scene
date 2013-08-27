@@ -328,6 +328,8 @@ namespace graphic
 			parsing_exception("unknown camera",line);			
 		}
 
+		ss >> transformation;
+
 		if(transformation == "rotatex")
 		{
 			double angle;
@@ -543,7 +545,7 @@ namespace graphic
 	std::string const syntax_camera()
 	{
 		std::string syntax;
-		syntax.insert(0,"define camera <fov_x>\n");
+		syntax.insert(0,"define camera <name> <fov_x>\n");
 
 		return syntax;
 	}

@@ -22,6 +22,9 @@ define light spot -2.5 0.0 0.0 0.3 0.3 0.3 0.9 0.9 0.9
 
 define camera eye 45.0
 
+fov eye rotatez 10.0
+fov eye translate 1.0 0.0 0.0
+
 # render
 
 render eye default.ppm 1000 800

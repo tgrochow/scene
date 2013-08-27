@@ -64,8 +64,8 @@ namespace graphic
 	// help with syntax
 	std::string const syntax_material();
 	std::string const syntax_box();
-	//std::string const syntax_cone();
-	//std::string const syntax_cylinder();
+	std::string const syntax_cone();
+	std::string const syntax_cylinder();
 	std::string const syntax_sphere();
 	std::string const syntax_light();
 	std::string const syntax_camera();

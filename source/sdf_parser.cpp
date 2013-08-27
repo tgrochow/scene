@@ -136,8 +136,8 @@ namespace graphic
 								  std::shared_ptr<Material> > const& materials,
 								  unsigned short line) const
 	{
-		//if(count_words(ss.str()) != 12)
-			//parsing_exception(syntax_cone(),line);	
+		if(count_words(ss.str()) != 12)
+			parsing_exception(syntax_cone(),line);	
 
 		std::string name,material;
 		double end[3],top[3],radius;
@@ -171,8 +171,8 @@ namespace graphic
 					 			 	 std::shared_ptr<Material> > const& materials,
 								 	 unsigned short line) const
 	{
-		//if(count_words(ss.str()) != 12)
-			//parsing_exception(syntax_cylinder(),line);			
+		if(count_words(ss.str()) != 12)
+			parsing_exception(syntax_cylinder(),line);			
 
 		std::string name,material;
 		double min[3],max[3],radius;
@@ -527,6 +527,26 @@ namespace graphic
 		std::string syntax;
 		syntax.insert(0,"define shape sphere <name> <pos_x> <pos_y> <pos_z>");
 		syntax.insert(syntax.length()-1,"<radius> <matname>\n");
+
+		return syntax;
+	}
+
+	// return syntax for defining a cone
+	std::string const syntax_cone()
+	{
+		std::string syntax;
+		syntax.insert(0,"define shape cone <name> <end_x> <end_y> <end_z>");
+		syntax.insert(syntax.length()-1,"<top_x> <top_y> <top_z> <mat_name>\n");
+
+		return syntax;
+	}
+
+	// return syntax for defining a cylinder
+	std::string const syntax_cylinder()
+	{
+		std::string syntax;
+		syntax.insert(0,"define shape cylinder <name> <min_x> <min_y> <min_z>");
+		syntax.insert(syntax.length()-1,"<max_x> <max_y> <max_z> <mat_name>\n");
 
 		return syntax;
 	}

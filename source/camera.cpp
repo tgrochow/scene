@@ -9,8 +9,8 @@ namespace graphic
 	Camera::Camera() :
 	name_(std::string("default")),
 	pos_(math3d::Point::origin()),
-	up_(math3d::Vector::unit_y()),
 	dir_(math3d::Vector(0.0,0.0,-1.0)),
+	up_(math3d::Vector::unit_y()),
 	fovx_(45.0)
 	{}
 
@@ -18,10 +18,22 @@ namespace graphic
 	Camera::Camera(std::string const& name,double fovx) :
 	name_(name),
 	pos_(math3d::Point::origin()),
-	up_(math3d::Vector::unit_y()),
 	dir_(math3d::Vector(0.0,0.0,-1.0)),
+	up_(math3d::Vector::unit_y()),
 	fovx_(fovx)
 	{}
+
+	// user constructor
+	Camera::Camera(std::string const& name,double fovx,
+						math3d::Point const& pos,math3d::Vector const& dir,
+						math3d::Vector const& up) :
+	name_(name),
+	pos_(pos),
+	dir_(dir),
+	up_(up),
+	fovx_(fovx)
+	{}
+
 
 	// destructor
 	Camera::~Camera()

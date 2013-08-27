@@ -130,6 +130,78 @@ namespace graphic
 		return std::make_pair(name,std::shared_ptr<Sphere>(sphere));
 	}
 
+	// parse cone for map insertion
+	std::pair<std::string,std::shared_ptr<Cone> > const
+	Sdf_parser::parse_cone(std::stringstream & ss,std::map<std::string,
+								  std::shared_ptr<Material> > const& materials,
+								  unsigned short line) const
+	{
+		//if(count_words(ss.str()) != 12)
+			//parsing_exception(syntax_cone(),line);	
+
+		std::string name,material;
+		double end[3],top[3],radius;
+
+		ss >> name;
+		ss >> end[0];
+		ss >> end[1];
+		ss >> end[2];
+		ss >> top[0];
+		ss >> top[1];
+		ss >> top[2];
+		ss >> radius;
+		ss >> material;
+
+		if (materials.find(material) == materials.end())
+		{	
+			parsing_exception("unknown material",line);
+		}	
+
+		std::shared_ptr<Material> m = materials.find(material)->second;
+		math3d::Point p_end(end[0],end[1],end[2]),
+						  p_top(top[0],top[1],top[2]);
+		Cone * cone = new Cone(name,m,p_end,p_top,radius);	
+
+		return std::make_pair(name,std::shared_ptr<Cone>(cone));
+	}
+
+	// parse cylinder for map insertion
+	/*
+	std::pair<std::string,std::shared_ptr<Sphere> > const
+	Sdf_parser::parse_cylinder(std::stringstream & ss,std::map<std::string,
+					 			 	 std::shared_ptr<Material> > const& materials,
+								 	 unsigned short line) const
+	{
+		//if(count_words(ss.str()) != 12)
+			//parsing_exception(syntax_cylinder(),line);			
+
+		std::string name,material;
+		double center[3], radius;
+						
+		ss >> name;
+		ss >> min[0];
+		ss >> min[1];
+		ss >> min[2];
+		ss >> max[0];
+		ss >> max[1];
+		ss >> max[2];
+		ss >> radius;
+		ss >> material;
+
+		if (materials.find(material) == materials.end())
+		{	
+			parsing_exception("unknown material",line);
+		}	
+
+		std::shared_ptr<Material> m = materials.find(material)->second;
+		math3d::Point p_min(min[0],min[1],min[2]),
+						  p_max(max[0],max[1],max[2]);
+		Cylinder * cylinder = new Cylinder(name,m,p_min,p_max,radius);	
+
+		return std::make_pair(name,std::shared_ptr<Sphere>(cylinder));
+	}
+	*/
+
 	// parse light for map insertion
 	std::pair<std::string,Light> const
 	Sdf_parser::parse_light(std::stringstream & ss,unsigned short line) const
@@ -290,6 +362,11 @@ namespace graphic
 					else if (command == "sphere")
 					{
 						shapes.insert(parse_sphere(ss,materials,number));
+					}
+
+					else if (command == "cone")
+					{
+						shapes.insert(parse_cone(ss,materials,number));
 					}
 				
 					else 

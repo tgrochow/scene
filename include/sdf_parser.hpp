@@ -4,6 +4,8 @@
 #include <string>
 
 #include "../include/box.hpp"
+#include "../include/cone.hpp"
+//#include "../include/cylinder.hpp"
 #include "../include/scene.hpp"
 #include "../include/sphere.hpp"
 
@@ -35,6 +37,12 @@ namespace graphic
 		std::pair<std::string,std::shared_ptr<Sphere> > const
 		parse_sphere(std::stringstream &,std::map<std::string,
 					 	 std::shared_ptr<Material> > const&,unsigned short) const;
+		std::pair<std::string,std::shared_ptr<Cone> > const
+		parse_cone(std::stringstream &,std::map<std::string,
+					 	 std::shared_ptr<Material> > const&,unsigned short) const;
+		//std::pair<std::string,std::shared_ptr<Cylinder> > const
+		//parse_cylinder(std::stringstream &,std::map<std::string,
+					 	 //std::shared_ptr<Material> > const&,unsigned short) const;
 		std::pair<std::string,Light> const
 		parse_light(std::stringstream &,unsigned short) const;
 		std::pair<std::string,std::shared_ptr<Camera> > const
@@ -52,6 +60,8 @@ namespace graphic
 	// help with syntax
 	std::string const syntax_material();
 	std::string const syntax_box();
+	//std::string const syntax_cone();
+	//std::string const syntax_cylinder();
 	std::string const syntax_sphere();
 	std::string const syntax_light();
 	std::string const syntax_camera();

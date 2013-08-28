@@ -1,4 +1,5 @@
 #include "../include/cylinder.hpp"
+#include "../include/circle.hpp"
 
 #include "../include/graphic_exception.hpp"
 
@@ -38,7 +39,6 @@ namespace graphic
 	}
 
 
-
 	// destructor
 	Cylinder::~Cylinder()
 	{}
@@ -52,6 +52,7 @@ math3d::Intersection const Cylinder::intersect(math3d::Ray const& ray) const
 		math3d::Point origin(r.origin_);	
 		math3d::Vector AB, AO, AOxAB, VxAB, direction(r.direction_), d, normal;
 
+		//Intersection Cylinder Mantel 
 		AB = max_ - min_;
 		AO = origin - min_;
 		AOxAB = cross(AO,AB);
@@ -91,15 +92,62 @@ math3d::Intersection const Cylinder::intersect(math3d::Ray const& ray) const
 		s.direction_ = d;
 		normal = origin - s.position(h);
 
+		math3d::Intersection icylinder(math3d::Intersection(true,origin,normal,material_));
+
 		if(!(origin[0] >= min_[0] -radius_ && origin[0] <= max_[0] + radius_ &&
 			origin[1] >= min_[1] -radius_ && origin[1] <= max_[1] + radius_ &&
 			origin[2] >= min_[2] -radius_ && origin[2] <= max_[2] + radius_))
 		{
-			return math3d::Intersection();
+			icylinder.hit_ = false;
 		}
 
-		//direction = origin - normal;
-		return transform(math3d::Intersection(true,origin,normal,material_));
-	}
+		icylinder = transform(icylinder);
 
+
+		math3d::Intersection ic1(Circle(name_, std::shared_ptr<Material>(material_), min_, radius_).intersect(r));
+		math3d::Intersection ic2(Circle(name_, std::shared_ptr<Material>(material_), max_, radius_).intersect(r));
+			
+		if (icylinder.hit_)
+		{
+			if (ic1.hit_)
+			{
+				if (math3d::distance(icylinder.intersection_, r.origin_) < math3d::distance(ic1.intersection_, r.origin_))
+					return icylinder;
+				else 
+					return ic1;
+			}
+			else if (ic2.hit_)
+			{
+				if (math3d::distance(icylinder.intersection_, r.origin_) < math3d::distance(ic2.intersection_, r.origin_))
+					return icylinder;
+				else 
+					return ic2;
+			}		
+		}
+
+		else
+		{
+			if (ic1.hit_)
+			{
+				if (ic2.hit_)
+				{
+					if (math3d::distance(ic1.intersection_, r.origin_) < math3d::distance(ic2.intersection_, r.origin_))
+						return ic1;
+					else 
+						return ic2;
+				}
+				
+				else 
+				{
+					return ic1;
+				}
+			}
+
+			else
+			{
+				return ic2;
+			}
+		}
+			return icylinder;
+	}
 }

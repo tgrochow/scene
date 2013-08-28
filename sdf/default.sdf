@@ -1,8 +1,8 @@
 # materials
 
-define material red 1 0 0 1 0 0 1 0 0 120
-define material blue 0 0 1 0 0 1 0 0 1 500
-define material green 0 0.4 0 0 0.4 0 0 0.4 0 3
+define material red 1 0 0 1 0 0 1 0 0 1.0
+define material blue 0 0 1 0 0 1 0 0 1 1.0
+define material green 0 0.4 0 0 0.4 0 0 0.4 0 1.0
 
 # geometry
 

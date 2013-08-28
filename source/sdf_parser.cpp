@@ -233,18 +233,38 @@ namespace graphic
 	std::pair<std::string,std::shared_ptr<Camera> > const
 	Sdf_parser::parse_camera(std::stringstream & ss,unsigned short line) const
 	{
-		if(count_words(ss.str()) != 4)
+		if(count_words(ss.str()) != 4 && count_words(ss.str()) != 13)
 			parsing_exception(syntax_camera(),line);		
 
 		std::string name;
 		double fovx;
-
 		ss >> name;
 		ss >> fovx;
 
-		Camera * camera = new Camera(name, fovx);
+		if(count_words(ss.str()) == 4)
+		{
+			Camera * camera = new Camera(name,fovx);
+			return std::make_pair(name,std::shared_ptr<Camera>(camera));
+		}
 
-		return std::make_pair(name,std::shared_ptr<Camera>(camera));
+		else
+		{
+			double pos[3],dir[3],up[3];
+			ss >> pos[0];
+			ss >> pos[1];
+			ss >> pos[2];
+			ss >> dir[0];
+			ss >> dir[1];
+			ss >> dir[2];
+			ss >> up[0];
+			ss >> up[1];
+			ss >> up[2];
+			math3d::Point p(pos[0],pos[1],pos[2]);
+			math3d::Vector d(dir[0],dir[1],dir[2]),u(up[0],up[1],up[2]);
+			
+			Camera * camera = new Camera(name,fovx,p,d,u);
+			return std::make_pair(name,std::shared_ptr<Camera>(camera));			
+		}
 	}
 
 	// transform shapes

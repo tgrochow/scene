@@ -66,7 +66,7 @@ namespace graphic
 	{
 		math3d::Point origin(r.origin_);
 		math3d::Vector direction(r.direction_);
-		
+
 		origin = transform_ * origin;		
 		direction = transform_ * direction;
 

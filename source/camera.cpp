@@ -33,21 +33,21 @@ namespace graphic
 	up_(math3d::Vector::unit_y()),
 	fovx_(fovx)
 	{
-		math3d::Vector u(math3d::cross(dir_,up_));
-		math3d::Vector v(math3d::cross(u,dir_));
+		math3d::Vector u(math3d::cross(dir,up));
+		math3d::Vector v(math3d::cross(u,dir));
 
 		transform_[0] = u[0];
-		transform_[1] = v[0];
-		transform_[2] = -dir[0];
-		transform_[3] = pos_[0];
-		transform_[4] = u[1];
+		transform_[4] = v[0];
+		transform_[8] = -dir[0];
+		transform_[12] = pos[0];
+		transform_[1] = u[1];
 		transform_[5] = v[1];
-		transform_[6] = -dir[1];
-		transform_[7] = pos_[1];
-		transform_[8] = u[2];
-		transform_[9] = v[2];
+		transform_[9] = -dir[1];
+		transform_[13] = pos[1];
+		transform_[2] = u[2];
+		transform_[6] = v[2];
 		transform_[10] = -dir[2];
-		transform_[11] = pos_[2];
+		transform_[14] = pos[2];
 	}
 
 	// destructor

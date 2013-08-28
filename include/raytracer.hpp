@@ -15,24 +15,26 @@ namespace graphic
 	{
 		public :
 		Raytracer();
-		Raytracer(unsigned short,unsigned short);	
+		Raytracer(unsigned short);	
 		~Raytracer();
 
 		Color const 
 		trace(math3d::Ray const&,
 				std::map<std::string,std::shared_ptr<Shape> > const&,
-		 		std::map<std::string,Light> const&) const;
+		 		std::map<std::string,Light> const&,unsigned short = 0) const;
 
 		private :
 		Color const ambient_lum(std::map<std::string,Light> const&) const;
 		bool shadow(math3d::Ray const&,
-							std::map<std::string,std::shared_ptr<Shape> > const&)const;
+						std::map<std::string,std::shared_ptr<Shape> > const&,
+						std::string const&) const;
 		Color const 
 		calc_phong(math3d::Vector const&,math3d::Intersection const&,
 					  std::map<std::string,std::shared_ptr<Shape> > const&,
-					  std::map<std::string,Light> const&) const;
+					  std::map<std::string,Light> const&,std::string const&,
+					  unsigned short) const;
 		
-		unsigned short refl_depth_,refr_depth_;
+		unsigned short calc_depth_;
 	};
 }
 

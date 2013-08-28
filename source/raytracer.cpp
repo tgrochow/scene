@@ -6,14 +6,12 @@ namespace graphic
 {
 	// default constructor	
 	Raytracer::Raytracer() :
-	refl_depth_(10),
-	refr_depth_(10)
+	calc_depth_(5)
 	{}
 
 	// user constructor
-	Raytracer::Raytracer(unsigned short refl_depth,unsigned short refr_depth) :
-	refl_depth_(refl_depth),
-	refr_depth_(refr_depth)
+	Raytracer::Raytracer(unsigned short calc_depth) :
+	calc_depth_(calc_depth)
 	{}
 
 	// destructor
@@ -24,7 +22,7 @@ namespace graphic
 	Color const Raytracer::
 	trace(math3d::Ray const& r,
 			std::map<std::string,std::shared_ptr<Shape> > const& shapes,
-			std::map<std::string,Light> const& lights) const
+			std::map<std::string,Light> const& lights,unsigned short depth) const
 	{
 		// nearest intersection		
 		math3d::Intersection is1;

@@ -58,7 +58,7 @@ namespace graphic
 		std::map<std::string,std::shared_ptr<Shape> > calc_shapes(shapes);	
 
 		// initiate phong color calculation
-		return calc_phong(origin,is1,calc_shapes,lights,key);
+		return calc_phong(origin,is1,calc_shapes,lights,key,depth);
 	}
 
 	// calc the total ambient lumination
@@ -110,7 +110,7 @@ namespace graphic
 	calc_phong(math3d::Vector const& origin,math3d::Intersection const& is,
 				  std::map<std::string,std::shared_ptr<Shape> > const& shapes,
 				  std::map<std::string,Light> const& lights,
-				  std::string const& key_intersect) const
+				  std::string const& key_intersect,unsigned short depth) const
 	{
 		std::shared_ptr<Material> mat(is.material_);	
 		math3d::Vector n(is.normal_);	
@@ -135,6 +135,12 @@ namespace graphic
 				// phong illumination
 				total += l.dif_lum_ * (mat->diffuse_ * (math3d::dot(vl,n)) +
 				mat->specular_ * (pow(math3d::dot(vr,n),mat->spec_exp_)));
+				// reflection
+				if(depth <= calc_depth_)
+				{
+					// reflected ray					
+					math3d::Ray rr(is.intersection_,vr);
+				}
 			}
 		}
 

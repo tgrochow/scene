@@ -31,7 +31,8 @@ namespace graphic
 		Color const 
 		calc_phong(math3d::Vector const&,math3d::Intersection const&,
 					  std::map<std::string,std::shared_ptr<Shape> > const&,
-					  std::map<std::string,Light> const&,std::string const&) const;
+					  std::map<std::string,Light> const&,std::string const&,
+					  unsigned short) const;
 		
 		unsigned short calc_depth_;
 	};

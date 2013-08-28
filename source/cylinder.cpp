@@ -37,21 +37,32 @@ namespace graphic
 		throw Graphic_exception(std::string("violated radius condition (>0)"));
 	}
 
+
+
 	// destructor
 	Cylinder::~Cylinder()
 	{}
 
-	math3d::Intersection const Cylinder::intersect(math3d::Ray const& ray) const
-	{
-		double a,b,c,discriminant,side_b, h;		
-		math3d::Ray r(ray), s;
-		//r = transform(r);		
-		math3d::Point origin(r.origin_);	
-		math3d::Vector direction(r.direction_), d, normal;
 
-		a = pow(direction[0],2) + pow(direction[1],2);
-		b = 2*origin[0]*direction[0] + 2*origin[1]*direction[1];
-		c = pow(origin[0],2) + pow(origin[1],2) - 1;	
+math3d::Intersection const Cylinder::intersect(math3d::Ray const& ray) const
+	{
+		double ab2,a,b,c,discriminant,side_b,h;		
+		math3d::Ray r(ray), s;
+		r = transform(r);		
+		math3d::Point origin(r.origin_);	
+		math3d::Vector AB, AO, AOxAB, VxAB, direction(r.direction_), d, normal;
+
+		AB = max_ - min_;
+		AO = origin - min_;
+		AOxAB = cross(AO,AB);
+
+		VxAB = cross(ray.direction_,AB);
+		
+		ab2 = dot(AB,AB);
+		a = dot(VxAB,VxAB);
+		b = 2 * dot(VxAB, AOxAB);
+		c = dot(AOxAB,AOxAB) - (pow(radius_,2) * ab2);
+
 		discriminant = pow(b,2) - 4*a*c;
 
 		if(discriminant < 0)
@@ -80,8 +91,15 @@ namespace graphic
 		s.direction_ = d;
 		normal = origin - s.position(h);
 
-		//direction = origin - norm;
-                                                 // und max_?
+		if(!(origin[0] >= min_[0] -radius_ && origin[0] <= max_[0] + radius_ &&
+			origin[1] >= min_[1] -radius_ && origin[1] <= max_[1] + radius_ &&
+			origin[2] >= min_[2] -radius_ && origin[2] <= max_[2] + radius_))
+		{
+			return math3d::Intersection();
+		}
+
+		//direction = origin - normal;
 		return transform(math3d::Intersection(true,origin,normal,material_));
 	}
+
 }

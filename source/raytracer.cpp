@@ -57,12 +57,10 @@ namespace graphic
 		origin = math3d::normalize(origin);
 
 		// shapes for color calculation
-		std::map<std::string,std::shared_ptr<Shape> > calc_shapes(shapes);
-		// remove shape with nearest intersection
-		calc_shapes.erase(key);		
+		std::map<std::string,std::shared_ptr<Shape> > calc_shapes(shapes);	
 
 		// initiate phong color calculation
-		return calc_phong(origin,is1,calc_shapes,lights);
+		return calc_phong(origin,is1,calc_shapes,lights,key);
 	}
 
 	// calc the total ambient lumination
@@ -85,7 +83,8 @@ namespace graphic
 	// check if intersection is in the shadow of another shape
 	bool Raytracer::
 	shadow(math3d::Ray const& rl,
-			 std::map<std::string,std::shared_ptr<Shape> > const& shapes) const
+			 std::map<std::string,std::shared_ptr<Shape> > const& shapes,
+			 std::string const& key_intersect) const
 	{
 		bool in_shadow(false);	
 
@@ -93,12 +92,15 @@ namespace graphic
 		for(std::map<std::string,std::shared_ptr<Shape> >::const_iterator i = 
 			 shapes.begin() ; i != shapes.end() ; i++)	
 		{
-			math3d::Intersection is(i->second->intersect(rl));
+			if(i->first != key_intersect)
+			{			
+				math3d::Intersection is(i->second->intersect(rl));
 			
-			if(is.hit_)
-			{ 			
-				in_shadow = true;
-				break;
+				if(is.hit_)
+				{ 			
+					in_shadow = true;
+					break;
+				}
 			}
 		}	
 
@@ -109,7 +111,8 @@ namespace graphic
 	Color const Raytracer::
 	calc_phong(math3d::Vector const& origin,math3d::Intersection const& is,
 				  std::map<std::string,std::shared_ptr<Shape> > const& shapes,
-				  std::map<std::string,Light> const& lights) const
+				  std::map<std::string,Light> const& lights,
+				  std::string const& key_intersect) const
 	{
 		std::shared_ptr<Material> mat(is.material_);	
 		math3d::Vector n(is.normal_);	
@@ -125,7 +128,7 @@ namespace graphic
 			// calc vector to actual light source		
 			math3d::Vector vl(l.position_ - is.intersection_);
 
-			if(!shadow(math3d::Ray(is.intersection_,vl),shapes))
+			if(!shadow(math3d::Ray(is.intersection_,vl),shapes,key_intersect))
 			{
 				// calc reflected vector
 				math3d::Vector vr(vl.reflected(n));

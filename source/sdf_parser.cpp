@@ -447,6 +447,11 @@ namespace graphic
 						shapes.insert(parse_sphere(ss,materials,number));
 					}
 
+					else if (command == "triangle")
+					{
+						shapes.insert(parse_triangle(ss,materials,number));
+					}
+
 					else if (command == "cone")
 					{
 						shapes.insert(parse_cone(ss,materials,number));

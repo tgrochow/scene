@@ -130,6 +130,44 @@ namespace graphic
 		return std::make_pair(name,std::shared_ptr<Sphere>(sphere));
 	}
 
+	// parse triangle for map insertion
+	std::pair<std::string,std::shared_ptr<Triangle> > const
+	Sdf_parser::parse_triangle(std::stringstream & ss,std::map<std::string,
+								  std::shared_ptr<Material> > const& materials,
+								  unsigned short line) const
+	{
+		if(count_words(ss.str()) != 14)
+			parsing_exception(syntax_triangle(),line);	
+
+		std::string name,material;
+		double A[3],B[3],C[3];
+
+		ss >> name;
+		ss >> A[0];
+		ss >> A[1];
+		ss >> A[2];
+		ss >> B[0];
+		ss >> B[1];
+		ss >> B[2];
+		ss >> C[0];
+		ss >> C[1];
+		ss >> C[2];
+		ss >> material;
+
+		if (materials.find(material) == materials.end())
+		{	
+			parsing_exception("unknown material",line);
+		}	
+
+		std::shared_ptr<Material> m = materials.find(material)->second;
+		math3d::Point p_A(A[0],A[1],A[2]),
+						  p_B(A[0],B[1],B[2]),
+						  p_C(B[0],C[1],C[2]);
+		Triangle * triangle = new Triangle(name,m,p_A,p_B,p_C);	
+
+		return std::make_pair(name,std::shared_ptr<Triangle>(triangle));
+	}
+
 	// parse cone for map insertion
 	std::pair<std::string,std::shared_ptr<Cone> > const
 	Sdf_parser::parse_cone(std::stringstream & ss,std::map<std::string,
@@ -521,6 +559,17 @@ namespace graphic
 		std::string syntax;
 		syntax.insert(0,"define shape sphere <name> <pos_x> <pos_y> <pos_z>");
 		syntax.insert(syntax.length()-1,"<radius> <matname>\n");
+
+		return syntax;
+	}
+
+	// return syntax for defining a triangle
+	std::string const syntax_triangle()
+	{
+		std::string syntax;
+		syntax.insert(0,"define shape triangle <name> <A_pos_x> <A_pos_y> <A_pos_z>");
+		syntax.insert(syntax.length()-1,"<B_pos_x> <B_pos_y> <B_pos_z>\n");
+		syntax.insert(syntax.length()-1,"<C_pos_x> <C_pos_y> <C_pos_z>\n");
 
 		return syntax;
 	}

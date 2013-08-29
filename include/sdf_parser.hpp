@@ -8,6 +8,7 @@
 #include "../include/cylinder.hpp"
 #include "../include/scene.hpp"
 #include "../include/sphere.hpp"
+#include "../include/triangle.hpp"
 
 namespace graphic
 {
@@ -37,6 +38,9 @@ namespace graphic
 		std::pair<std::string,std::shared_ptr<Sphere> > const
 		parse_sphere(std::stringstream &,std::map<std::string,
 					 	 std::shared_ptr<Material> > const&,unsigned short) const;
+		std::pair<std::string,std::shared_ptr<Triangle> > const
+		parse_triangle(std::stringstream &,std::map<std::string,
+					 	 std::shared_ptr<Material> > const&,unsigned short) const;
 		std::pair<std::string,std::shared_ptr<Cone> > const
 		parse_cone(std::stringstream &,std::map<std::string,
 					 	 std::shared_ptr<Material> > const&,unsigned short) const;
@@ -64,6 +68,7 @@ namespace graphic
 	std::string const syntax_cone();
 	std::string const syntax_cylinder();
 	std::string const syntax_sphere();
+	std::string const syntax_triangle();
 	std::string const syntax_light();
 	std::string const syntax_camera();
 	std::string const syntax_render();

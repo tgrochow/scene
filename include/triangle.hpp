@@ -15,12 +15,11 @@ namespace graphic
 		Triangle(std::string const&,std::shared_ptr<Material> const&,
 			 math3d::Point const&, math3d::Point const&, math3d::Point const&);
 		~Triangle();
-
-		bool inside(math3d::Point const&) const;	
+	
 		math3d::Intersection const intersect(math3d::Ray const&) const;
 				
 		private :
-		math3d::Point a_,b_,c_;
+		math3d::Point V0_,V1_,V2_;
 	};
 }
 

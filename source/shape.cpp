@@ -71,7 +71,7 @@ namespace graphic
 		math3d::Matrix inv_trans(inv_transform_);
 		inv_trans.transpose();
 		math3d::Vector normal(inv_trans * i.normal_);
-		normal = normal.normalize();
+		normal.normalize();
 
 		return math3d::Intersection(i.hit_,intersection,normal,i.material_);
 	}

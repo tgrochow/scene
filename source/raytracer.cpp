@@ -1,7 +1,7 @@
 #include "../include/raytracer.hpp"
 
 #include <cmath>
-
+#include <iostream>
 namespace graphic
 {
 	// default constructor	
@@ -22,7 +22,8 @@ namespace graphic
 	Color const Raytracer::
 	trace(math3d::Ray const& r,
 			std::map<std::string,std::shared_ptr<Shape> > const& shapes,
-			std::map<std::string,Light> const& lights,unsigned short depth) const
+			std::map<std::string,Light> const& lights,
+			std::string const& key_intersect,unsigned short depth) const
 	{
 		// nearest intersection		
 		math3d::Intersection is1;
@@ -33,32 +34,29 @@ namespace graphic
 		for(std::map<std::string,std::shared_ptr<Shape> >::const_iterator i = 
 			 shapes.begin() ; i != shapes.end() ; i++)	
 		{
-			// actual intersection			
-			math3d::Intersection is2(i->second->intersect(r));
+			// reflection don't intersect with shape from the last intersection			
+			if(i->first != key_intersect)
+			{			
+				// actual intersection			
+				math3d::Intersection is2(i->second->intersect(r));
 
-			/* if nearest intersection isn't set or the actual intersection 
-				is closer to viewpoint */		
-			if(!is1.hit_ || (is2.hit_ && 
-				math3d::distance(r.origin_,is2.intersection_) <
-				math3d::distance(r.origin_,is1.intersection_)))
-			{				
-				is1 = is2;
-				key = i->first;
+				/* if nearest intersection isn't set or the actual intersection 
+					is closer to viewpoint */		
+				if(!is1.hit_ || (is2.hit_ && 
+					math3d::distance(r.origin_,is2.intersection_) <
+					math3d::distance(r.origin_,is1.intersection_)))
+				{				
+					is1 = is2;
+					key = i->first;
+				}
 			}
 		}	
 
 		// no hit
 		if(!is1.hit_) return Color();
 
-		// calc vector to viewpoint
-		math3d::Vector origin(r.origin_ - is1.intersection_);
-		origin = math3d::normalize(origin);
-
-		// shapes for color calculation
-		std::map<std::string,std::shared_ptr<Shape> > calc_shapes(shapes);	
-
 		// initiate phong color calculation
-		return calc_phong(origin,is1,calc_shapes,lights,key,depth);
+		return calc_phong(r,is1,shapes,lights,key,depth);
 	}
 
 	// calc the total ambient lumination
@@ -107,7 +105,7 @@ namespace graphic
 
 	// calc color
 	Color const Raytracer::
-	calc_phong(math3d::Vector const& origin,math3d::Intersection const& is,
+	calc_phong(math3d::Ray const& r,math3d::Intersection const& is,
 				  std::map<std::string,std::shared_ptr<Shape> > const& shapes,
 				  std::map<std::string,Light> const& lights,
 				  std::string const& key_intersect,unsigned short depth) const
@@ -125,21 +123,28 @@ namespace graphic
 			Light	l(i->second);
 			// calc vector to actual light source		
 			math3d::Vector vl(l.position_ - is.intersection_);
+			// normalize vector
+			vl = math3d::normalize(vl);
+			// calc vector to viewpoint (ray origin)
+			math3d::Vector vo(r.origin_ - is.intersection_);
+			vo = math3d::normalize(vo);	
 
 			if(!shadow(math3d::Ray(is.intersection_,vl),shapes,key_intersect))
 			{
-				// calc reflected vector
+				// calc reflected light vector
 				math3d::Vector vr(vl.reflected(n));
-				// normalize vector to light source
-				vl = math3d::normalize(vl);
 				// phong illumination
 				total += l.dif_lum_ * (mat->diffuse_ * (math3d::dot(vl,n)) +
-				mat->specular_ * (pow(math3d::dot(vr,n),mat->spec_exp_)));
+				mat->specular_ * (pow(math3d::dot(vr,vo),mat->spec_exp_)));
 				// reflection
 				if(depth <= calc_depth_)
-				{
-					// reflected ray					
-					math3d::Ray rr(is.intersection_,vr);
+				{										
+					// calc reflected ray
+					/*vr = r.direction_ -
+						  2 * math3d::dot(is.normal_,r.direction_) * is.normal_;
+					math3d::Ray reflected_ray(is.intersection_,vr);
+					total += mat->specular_ * 
+					trace(reflected_ray,shapes,lights,key_intersect,depth+1);*/
 				}
 			}
 		}

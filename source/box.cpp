@@ -88,13 +88,13 @@ namespace graphic
 					case 1 : t = (max_[i]-origin[i])/direction[i];
 								break;
 				}
-
+				
 				// calc intersection
 				math3d::Point p(r.position(t));
 
 				// check if intersection is on box and compare with second intersect
 				if(inside(p) && (!is.hit_ || math3d::distance(origin,p) < 
-					math3d::distance(origin,is.intersection_)))
+					math3d::distance(origin,is.intersection_)) && t >= 0.0)
 				{													
 					is.hit_ = true;
 					is.intersection_ = p;

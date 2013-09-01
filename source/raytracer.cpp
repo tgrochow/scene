@@ -1,7 +1,7 @@
 #include "../include/raytracer.hpp"
 
 #include <cmath>
-#include <iostream>
+
 namespace graphic
 {
 	// default constructor	
@@ -130,7 +130,7 @@ namespace graphic
 			vo = math3d::normalize(vo);	
 
 			if(!shadow(math3d::Ray(is.intersection_,vl),shapes,key_intersect))
-			{
+			{			
 				// calc reflected light vector
 				math3d::Vector vr(vl.reflected(n));
 				// phong illumination
@@ -138,13 +138,14 @@ namespace graphic
 				mat->specular_ * (pow(math3d::dot(vr,vo),mat->spec_exp_)));
 				// reflection
 				if(depth <= calc_depth_)
-				{										
+				{															
 					// calc reflected ray
-					/*vr = r.direction_ -
-						  2 * math3d::dot(is.normal_,r.direction_) * is.normal_;
-					math3d::Ray reflected_ray(is.intersection_,vr);
-					total += mat->specular_ * 
-					trace(reflected_ray,shapes,lights,key_intersect,depth+1);*/
+					math3d::Vector ref(r.direction_ -
+						  2 * math3d::dot(is.normal_,r.direction_) * is.normal_);
+					math3d::Ray reflected_ray(is.intersection_,ref);
+					// add reflection
+					total += mat->specular_ *
+					trace(reflected_ray,shapes,lights,key_intersect,depth+1);
 				}
 			}
 		}

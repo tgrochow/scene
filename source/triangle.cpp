@@ -1,7 +1,6 @@
 #include "../include/triangle.hpp"
 #include "../include/graphic_exception.hpp"
 
-#define SMALL_NUM   0.00000001 // anything that avoids division overflow
 
 namespace graphic
 {
@@ -40,7 +39,6 @@ namespace graphic
 	Triangle::~Triangle()
 	{}
 
-	//int
 	math3d::Intersection const Triangle::intersect(math3d::Ray const& ray) const
 	{
 		math3d::Ray r(ray);
@@ -80,11 +78,11 @@ namespace graphic
 		// get and test parametric coords
 		double t1, t2;
 		t1 = ((uv * wv) - (vv * wu)) / D;
-		//if (t1 < 0.0 || t1 > 1.0)         // I is outside T
-			//return math3d::Intersection();
+		if (t1 < 0.0 || t1 > 1.0)         // I is outside T
+			return math3d::Intersection();
 		t2 = (uv * wu - uu * wv) / D;
-		//if (t2 < 0.0 || (t1 + t2) > 1.0)  // I is outside T
-			//return math3d::Intersection();
+		if (t2 < 0.0 || (t1 + t2) > 1.0)  // I is outside T
+			return math3d::Intersection();
 
 
 		origin = r.position(std::min(t1,t2));		

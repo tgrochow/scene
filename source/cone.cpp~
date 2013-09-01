@@ -43,7 +43,7 @@ namespace graphic
 
 	math3d::Intersection const Cone::intersect(math3d::Ray const& ray) const
 	{
-		double a, b, c, discriminant, side_b, h, ratio;		
+		double a, b, c, discriminant, side_b, h;		
 		math3d::Ray r(ray), s;
 		r = transform(r);		
 		math3d::Point origin(r.origin_);	

@@ -19,6 +19,8 @@ namespace graphic
 		math3d::Intersection const intersect(math3d::Ray const&) const;
 				
 		private :
+		// for intersect method
+		bool inside(math3d::Point const&) const;
 		math3d::Point V0_,V1_,V2_;
 	};
 }

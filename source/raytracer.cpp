@@ -180,12 +180,12 @@ namespace graphic
 							refr_vector += (w - k) * refr_intersection.normal_;
 							refr_ray.origin_ = refr_intersection.intersection_;
 							refr_ray.direction_ = math3d::normalize(refr_vector);
-
-							total = total * mat->opacity_;
-							total += 
-							trace(refr_ray,shapes,lights,key_intersect,depth+1) *
-							(1.0 - mat->opacity_);
 						}
+
+						total = total * mat->opacity_;
+						total += 
+						trace(refr_ray,shapes,lights,key_intersect,depth+1) *
+						(1.0 - mat->opacity_);
 					}
 				}
 			}

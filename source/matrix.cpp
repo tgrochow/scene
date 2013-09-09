@@ -353,11 +353,11 @@ operator*(Matrix const& lhs, const Point& rhs)
                lhs[2] * rhs[0] +
                lhs[6] * rhs[1] +
                lhs[10] * rhs[2] +
-               lhs[14] * rhs[3],
+               lhs[14] * rhs[3]/*,
                lhs[3] * rhs[0] +
                lhs[7] * rhs[1] +
                lhs[11] * rhs[2] +
-               lhs[15] * rhs[3]);
+               lhs[15] * rhs[3]*/);
 }
 
 Vector
@@ -374,11 +374,11 @@ operator*(Matrix const& lhs, const Vector& rhs)
                 lhs[2] * rhs[0] +
                 lhs[6] * rhs[1] +
                 lhs[10] * rhs[2] +
-                lhs[14] * rhs[3],
+                lhs[14] * rhs[3]/*,
                 lhs[3] * rhs[0] +
                 lhs[7] * rhs[1] +
                 lhs[11] * rhs[2] +
-                lhs[15] * rhs[3]);
+                lhs[15] * rhs[3]*/);
 }
 
 bool 

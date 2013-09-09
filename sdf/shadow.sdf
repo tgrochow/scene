@@ -1,7 +1,7 @@
 # materials
 
 define material violet 0.3 0.0 0.6 0.5 0.0 0.8 0.1 0.0 0.3 1.0 
-define material dark_blue 0.0 0.0 0.4 0.0 0.0 0.6 0.0 0.0 0.8 1.0
+define material dark_blue 0.0 0.0 0.6 0.0 0.0 0.8 0.0 0.0 0.0 1.0
 
 # geometry
 

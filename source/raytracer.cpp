@@ -138,7 +138,12 @@ namespace graphic
 				mat->specular_ * (pow(math3d::dot(vr,vo),mat->spec_exp_)));
 				// reflection
 				if(depth <= calc_depth_)
-				{															
+				{		
+					// reflection					
+					// if material reflects specular light					
+					if(mat->specular_[0] > 0.0 || mat->specular_[1] > 0.0 ||
+						mat->specular_[2] > 0.0)
+					{				
 					// calc reflected ray
 					math3d::Vector ref(r.direction_ -
 						  2 * math3d::dot(is.normal_,r.direction_) * is.normal_);
@@ -146,6 +151,50 @@ namespace graphic
 					// add reflection
 					total += mat->specular_ *
 					trace(reflected_ray,shapes,lights,key_intersect,depth+1);
+					}
+			
+					// refraction
+					// if material is transparent
+					if(mat->opacity_ < 1.0)
+					{
+						/* refraction in vacuum
+							source : http://www-gs.informatik.tu-cottbus.de/
+										projektstudium2006/doku/
+										transparenz-nebel-schatten.pdf */
+						// calc refracted vector	
+						double refr_rate(1.0 / mat->refraction_);
+						double w(math3d::dot(r.direction_,is.normal_));
+						w = -w * refr_rate;
+						double k(1 + (w - refr_rate) * (w + refr_rate));
+						math3d::Vector refr_vector(refr_rate * r.direction_);
+						refr_vector += (w - k) * is.normal_;
+						math3d::Ray refr_ray(is.intersection_,refr_vector);
+						// intersect with actual shape
+						math3d::Intersection refr_intersection
+						(shapes.find(key_intersect)->second->
+						intersect(refr_ray));
+
+						// if refracted ray hit other surface of intersection shape
+						if(refr_intersection.hit_)
+						{
+							// calc new refraction vector							
+							refr_rate = mat->refraction_;
+							w = math3d::dot(refr_ray.direction_,
+												 -refr_intersection.normal_);
+							w = -w * refr_rate;
+							k = 1 + (w - refr_rate) * (w + refr_rate);
+							refr_vector = refr_rate * refr_ray.direction_;
+							refr_vector += (w - k) * refr_intersection.normal_;
+							refr_ray.origin_ = refr_intersection.intersection_;
+							refr_ray.direction_ = math3d::normalize(refr_vector);
+						}
+
+						// add and scale refraction color
+						total = total * mat->opacity_;
+						total += 
+						trace(refr_ray,shapes,lights,key_intersect,depth+1) *
+						(1.0 - mat->opacity_);
+					}
 				}
 			}
 		}

@@ -60,7 +60,7 @@ namespace graphic
 		else if(discriminant == 0)
 		{
 			double t = -b / (2*a);
-			if(t < 0.0) return math3d::Intersection();
+			if(t <= 0.0) return math3d::Intersection();
 			origin = r.position(t);
 		}
 
@@ -69,9 +69,9 @@ namespace graphic
 			double t1,t2;
 			t1 = (-b + sqrt(discriminant)) / (2*a);
 			t2 = (-b - sqrt(discriminant)) / (2*a);
-			if(t1 < 0.0 && t2 < 0.0) return math3d::Intersection();
-			else if(t1 < 0.0) origin = r.position(t2);
-			else if(t2 < 0.0) origin = r.position(t1);
+			if(t1 <= 0.0 && t2 < 0.0) return math3d::Intersection();
+			else if(t1 <= 0.0) origin = r.position(t2);
+			else if(t2 <= 0.0) origin = r.position(t1);
 			else origin = r.position(std::min(t1,t2));
 		}
 

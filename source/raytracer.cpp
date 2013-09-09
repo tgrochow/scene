@@ -138,7 +138,12 @@ namespace graphic
 				mat->specular_ * (pow(math3d::dot(vr,vo),mat->spec_exp_)));
 				// reflection
 				if(depth <= calc_depth_)
-				{															
+				{		
+					// reflection					
+					// if material reflects specular light					
+					if(mat->specular_[0] > 0.0 || mat->specular_[1] > 0.0 ||
+						mat->specular_[2] > 0.0)
+					{				
 					// calc reflected ray
 					math3d::Vector ref(r.direction_ -
 						  2 * math3d::dot(is.normal_,r.direction_) * is.normal_);
@@ -146,6 +151,14 @@ namespace graphic
 					// add reflection
 					total += mat->specular_ *
 					trace(reflected_ray,shapes,lights,key_intersect,depth+1);
+					}
+			
+					// refraction
+					// if material is transparent
+					if(mat->opacity_ < 1.0)
+					{
+			
+					}
 				}
 			}
 		}

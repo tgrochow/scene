@@ -6,7 +6,7 @@
 # Select appropriate compiler.
 #CPP=g++
 CPP=g++
-CPPFLAGS=-std=c++0x -Wall -pedantic -O3     
+CPPFLAGS=-std=c++0x -Wall -pedantic -O3    
 
 ifdef DEBUG
 CPPFLAGS=-g

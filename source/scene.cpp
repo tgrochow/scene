@@ -39,7 +39,7 @@ namespace graphic
 		double d(rcam->calc_distance(resx_));
 
 		for(unsigned short y = 0 ; y < resy_ ; y++)
-		{
+		{			
 			for(unsigned short x = 0 ; x < resx_ ; x++)
 			{
 				Pixel p(x,y);				

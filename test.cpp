@@ -3,7 +3,7 @@
 
 int main(int argc,char * argv[])
 {
-   graphic::Sdf_parser parser("refraction.sdf");
+   graphic::Sdf_parser parser("reflection.sdf");
 	graphic::Scene scene(parser.parse_scene());
 	scene.save();
 	

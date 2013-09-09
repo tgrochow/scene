@@ -94,7 +94,7 @@ namespace graphic
 
 				// check if intersection is on box and compare with second intersect
 				if(inside(p) && (!is.hit_ || math3d::distance(origin,p) < 
-					math3d::distance(origin,is.intersection_)) && t >= 0.0)
+					math3d::distance(origin,is.intersection_)) && t > 0.0)
 				{													
 					is.hit_ = true;
 					is.intersection_ = p;

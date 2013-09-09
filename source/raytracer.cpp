@@ -157,7 +157,35 @@ namespace graphic
 					// if material is transparent
 					if(mat->opacity_ < 1.0)
 					{
-			
+						// refraction in vacuum
+						double refr_rate(1.0 / mat->refraction_);
+						double w(math3d::dot(r.direction_,is.normal_));
+						w = -w * refr_rate;
+						double k(1 + (w - refr_rate) * (w + refr_rate));
+						math3d::Vector refr_vector(refr_rate * r.direction_);
+						refr_vector += (w - k) * is.normal_;
+						math3d::Ray refr_ray(is.intersection_,refr_vector);
+						math3d::Intersection refr_intersection
+						(shapes.find(key_intersect)->second->
+						intersect(refr_ray));
+
+						if(refr_intersection.hit_)
+						{
+							refr_rate = mat->refraction_;
+							w = math3d::dot(refr_ray.direction_,
+												 -refr_intersection.normal_);
+							w = -w * refr_rate;
+							k = 1 + (w - refr_rate) * (w + refr_rate);
+							refr_vector = refr_rate * refr_ray.direction_;
+							refr_vector += (w - k) * refr_intersection.normal_;
+							refr_ray.origin_ = refr_intersection.intersection_;
+							refr_ray.direction_ = math3d::normalize(refr_vector);
+
+							total = total * mat->opacity_;
+							total += 
+							trace(refr_ray,shapes,lights,key_intersect,depth+1) *
+							(1.0 - mat->opacity_);
+						}
 					}
 				}
 			}

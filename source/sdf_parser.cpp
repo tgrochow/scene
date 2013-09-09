@@ -39,7 +39,7 @@ namespace graphic
 	std::pair<std::string,std::shared_ptr<Material> > const
 	Sdf_parser::parse_material(std::stringstream & ss,unsigned short line) const
 	{		
-		if(count_words(ss.str()) != 13)
+		if(count_words(ss.str()) != 13 && count_words(ss.str()) != 15)
 			parsing_exception(syntax_material(),line);	
 		
 		std::string name;		
@@ -60,8 +60,21 @@ namespace graphic
 		Color amb(ambient[0],ambient[1],ambient[2]),
 				dif(diffuse[0],diffuse[1],diffuse[2]),
 				spe(specular[0],specular[1],specular[2]);
+		
+		Material * material;
 
-		Material * material = new Material(name,amb,dif,spe,exp);
+		if(count_words(ss.str()) == 13)
+		{
+			material = new Material(name,amb,dif,spe,exp);
+		}
+	
+		else
+		{
+			double refr[2];
+			ss >> refr[0];	
+			ss >> refr[1];			
+			material = new Material(name,amb,dif,spe,exp,refr[0],refr[1]);
+		}
 
 		return std::make_pair(name,std::shared_ptr<Material>(material));
 	}

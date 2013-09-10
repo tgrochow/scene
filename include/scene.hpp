@@ -22,7 +22,13 @@ namespace graphic
 				std::map<std::string,std::shared_ptr<Shape> > const& shapes,
 				std::shared_ptr<Camera> const& rcam,std::string const& filename,
 				unsigned short resx,unsigned short resy);
-		void save() const;
+		void save(std::string const& = "") const;
+
+		void rotate_x(std::string const&,double,bool = true);
+		void rotate_y(std::string const&,double,bool = true);
+		void rotate_z(std::string const&,double,bool = true);
+		void scale(std::string const&,math3d::Vector const&,bool = true);
+		void translate(std::string const&,math3d::Vector const&,bool = true);		
 
 		private :
 		std::vector<Pixel> const render() const;

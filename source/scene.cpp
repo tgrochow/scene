@@ -25,7 +25,7 @@ namespace graphic
 		if(resx_ > 10000 || resy_ > 10000)
 		{
 			throw 
-			Graphic_exception(std::string("violated resolution (max : 10000)"));
+			Graphic_exception("violated resolution (max : 10000)");
 		}
 	}
 
@@ -60,10 +60,12 @@ namespace graphic
 	}
 	
 	void 
-	Scene::save() const
+	Scene::save(std::string const& filename) const
 	{
+		std::string name(filename_);		
+		if(filename != "") name = filename;
 
-		Ppmwriter image (resx_,resy_,filename_);
+		Ppmwriter image (resx_,resy_,name);
 		std::vector<Pixel> rendered(render());
 
 		for(std::vector<Pixel>::iterator i = rendered.begin();
@@ -73,5 +75,135 @@ namespace graphic
 		}
 
 		image.save();
+	}
+
+	void 
+	Scene::rotate_x(std::string const& name,double angle,bool shape)
+	{
+		if(shape)
+		{
+			if (shapes_.find(name) == shapes_.end())
+			{	
+				throw 
+				Graphic_exception("unknown shape");
+			}	
+
+			shapes_.find(name)->second->rotate_x(angle);
+		}
+
+		else
+		{
+			if (cameras_.find(name) == cameras_.end())
+			{	
+				throw 
+				Graphic_exception("unknown camera");
+			}	
+
+			cameras_.find(name)->second->rotate_x(angle);
+		}
+	}
+
+	void 
+	Scene::rotate_y(std::string const& name,double angle,bool shape)
+	{
+		if(shape)
+		{
+			if (shapes_.find(name) == shapes_.end())
+			{	
+				throw 
+				Graphic_exception("unknown shape");
+			}	
+
+			shapes_.find(name)->second->rotate_y(angle);
+		}
+
+		else
+		{
+			if (cameras_.find(name) == cameras_.end())
+			{	
+				throw 
+				Graphic_exception("unknown camera");
+			}	
+
+			cameras_.find(name)->second->rotate_y(angle);
+		}
+	}
+
+	void 
+	Scene::rotate_z(std::string const& name,double angle,bool shape)
+	{
+		if(shape)
+		{
+			if (shapes_.find(name) == shapes_.end())
+			{	
+				throw 
+				Graphic_exception("unknown shape");
+			}	
+
+			shapes_.find(name)->second->rotate_z(angle);
+		}
+
+		else
+		{
+			if (cameras_.find(name) == cameras_.end())
+			{	
+				throw 
+				Graphic_exception("unknown camera");
+			}	
+
+			cameras_.find(name)->second->rotate_z(angle);
+		}
+	}
+
+	void 
+	Scene::scale(std::string const& name,math3d::Vector const& sv,bool shape)
+	{
+		if(shape)
+		{
+			if (shapes_.find(name) == shapes_.end())
+			{	
+				throw 
+				Graphic_exception("unknown shape");
+			}	
+
+			shapes_.find(name)->second->scale(sv);
+		}
+
+		else
+		{
+			if (cameras_.find(name) == cameras_.end())
+			{	
+				throw 
+				Graphic_exception("unknown camera");
+			}	
+
+			cameras_.find(name)->second->scale(sv);
+		}
+	}
+
+	void 
+	Scene::translate(std::string const& name,math3d::Vector const& tv,bool shape)
+	{
+		if(shape)
+		{
+			if (shapes_.find(name) == shapes_.end())
+			{	
+				throw 
+				Graphic_exception("unknown shape");
+			}	
+
+			shapes_.find(name)->second->translate(tv);
+		}
+
+		else
+		{
+			if (cameras_.find(name) == cameras_.end())
+			{	
+				throw 
+				Graphic_exception("unknown camera");
+			}	
+
+			cameras_.find(name)->second->translate(tv);
+		}
 	}
 }

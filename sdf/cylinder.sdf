@@ -1,15 +1,18 @@
 # materials
 
-define material violet 0.3 0.0 0.6 0.5 0.0 0.8 0.1 0.0 0.3 1.0 
+define material violet 0.3 0.0 0.6 0.5 0.0 0.8 0.1 0.0 0.3 1.0
 
 # geometry
 
-define shape cylinder test_cylinder -0.5 -0.5 0.5 -0.5 -0.5 0.9 2 violet
+#define shape cylinder test_cylinder -0.5 -0.5 0.5 -0.5 -0.5 0.9 2 violet
+define shape cylinder test_cylinder 0.5 0.5 -40.0 0.5 2.5 -40.0 2 violet
 
 # transformation
 
-transform test_cylinder rotatez 20
-transform test_cylinder translate 0.0 3.0 -20.0
+#transform test_box rotatex 20
+#transform test_box rotatey 30
+#transform test_box scale 3.0 3.0 3.0
+#transform test_cylinder translate 0.0 3.0 -5.0
 
 # light
 
@@ -22,4 +25,3 @@ define camera eye 45.0
 # render
 
 render eye default.ppm 1000 800
-

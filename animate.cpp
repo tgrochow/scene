@@ -7,8 +7,8 @@ int main(int argc,char * argv[])
    graphic::Sdf_parser parser("animation.sdf");
 	graphic::Scene scene(parser.parse_scene());
 
-	const unsigned short total(120);
-	const double angle(90.0);
+	const unsigned short total(180);
+	const double angle(130.0);
 
 	for(unsigned short number = 0 ; number < total ; number++)
 	{

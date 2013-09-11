@@ -3,6 +3,7 @@ define material red 0.6 0.4 0.4 1.0 0.4 0.4 0.6 0.4 0.4 1.0
 
 define shape box pane -5.0 -5.0 -5.0 5.0 5.0 -4.5 glass_blue
 define shape sphere model1 -6.5 0.0 -30.0 3.0 red
+#define shape sphere model2 0.0 0.0 -10 3.0 glass_blue
 
 transform pane rotatey 2.5
 transform pane translate 0.0 0.0 -15.0 

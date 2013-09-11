@@ -15,7 +15,7 @@ namespace graphic
 		// constructor,destructor
 		Scene_object();
 		Scene_object(std::string const&);
-		~Scene_object();
+		virtual ~Scene_object();
 
 		// transform world
 		virtual void rotate_x(double angle);

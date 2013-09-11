@@ -2,8 +2,7 @@
 
 define material red 1 0 0 1 0 0 1 0 0 1.0
 define material blue 0 0 1 0 0 1 0 0 1 1.0
-define material green 0 0.4 0 0 0.4 0 0 0.4 0 1.0
-
+define material green 0 0.4 0 0 0.4 0 0 0.4 0 90.0
 # geometry
 
 define shape box box 10 10 -100 15 15 -80 red
@@ -20,4 +19,4 @@ define camera eye 39.0
 
 # ... and go
 
-render eye default.ppm 1000 800
+render eye default.ppm 1024 768

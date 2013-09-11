@@ -135,7 +135,7 @@ namespace graphic
 				math3d::Vector vr(vl.reflected(n));
 				// phong illumination
 				total += l.dif_lum_ * (mat->diffuse_ * (math3d::dot(vl,n)) +
-				mat->specular_ * (pow(math3d::dot(vr,vo),mat->spec_exp_)));
+				mat->specular_ * (pow(std::max(0.0,math3d::dot(vr,vo)),mat->spec_exp_)));
 				// reflection
 				if(depth <= calc_depth_)
 				{		

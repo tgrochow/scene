@@ -37,8 +37,7 @@ namespace graphic
 	math3d::Intersection const Sphere::intersect(math3d::Ray const& ray) const
 	{
 		double a,b,c,discriminant;		
-		math3d::Ray r(ray);
-		r = transform(r);		
+		math3d::Ray r = transform(ray);
 		math3d::Point origin(r.origin_);	
 		math3d::Vector direction(r.direction_);
 
